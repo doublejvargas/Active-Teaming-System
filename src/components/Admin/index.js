@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { withFirebase } from '../Firebase';
 
-const Admin = () => (
-  <div>
-    <h1>Admin</h1>
-  </div>
-);
+class Admin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {list : []};
+  }
 
-export default Admin;
+  componentDidMount () {
+    this.props.firebase.getPendingUsers()
+    .get()
+    .then(users => {
+      users.forEach(user => {
+        const { list } = this.state;
+        this.setState({list: [...list, user.data()]});
+      });
+    });
+  }
+
+  
+  render() {
+    const { list } = this.state;
+    return list.map(user => (
+    <div key = {user.email}>
+      {user.email}
+    </div>
+    ));
+  }
+}
+
+export default withFirebase(Admin);

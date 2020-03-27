@@ -31,14 +31,32 @@ class SignUpFormBase extends Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  submit = (event) => {
+  newUser(event) {
     const tempPassword = '123456';
-    const { name, email } = this.state;
+    const {name, email, interest, credential, reference} = this.state;
 
     this.props.firebase.createUserWithEmailAndPassword(email, tempPassword)
     .then(res => {
+      return this.props.firebase.setUser(email)
+              .set({name, email, interest, credential, reference, role: 'OU'});
+    })
+    .then(res => {
       this.setState({...INITIAL_STATE});
       this.props.firebase.passwordReset(email);
+      this.props.history.push(ROUTES.HOME);
+    })
+    .catch(error => {
+      this.setState({error});
+    });
+    event.preventDefault();
+  }
+
+  newPendingUser = (event) => {
+    const {name, email, interest, credential, reference} = this.state;
+    this.props.firebase.setPendingUser(email)
+    .set({name, email, interest, credential, reference, rejectedCount: 0})
+    .then(res => {
+      this.setState({...INITIAL_STATE});
       this.props.history.push(ROUTES.HOME);
     })
     .catch(error => {
@@ -60,7 +78,7 @@ class SignUpFormBase extends Component {
       email === '' || name === '' || interest === ''
       || credential === '';
     return (
-      <form onSubmit={this.submit}>
+      <form onSubmit={this.newPendingUser}>
         <input
           name="name"
           value={name}
