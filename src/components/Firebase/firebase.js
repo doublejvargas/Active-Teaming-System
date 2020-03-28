@@ -41,7 +41,12 @@ class Firebase {
   }
 
   getPendingUsers() {
-    return this.db.collection('pendingUsers');
+    return this.db.collection('pendingUsers')
+    .where("rejected","in",["zero", "appeal"]);
+  }
+
+  updatePendingUserInfo(userEmail, info) {
+    return this.db.doc(`pendingUsers/${userEmail}`).update(info);
   }
 }
 export default Firebase;
