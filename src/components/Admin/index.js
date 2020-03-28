@@ -30,11 +30,11 @@ class Admin extends Component {
     const {name, email, interest, credential, reference} = userInfo;
     this.props.firebase.createUserWithEmailAndPassword(email, tempPassword)
     .then(res => {
-      return this.props.firebase.setUser(email)
+      return this.props.firebase.user(email)
               .set({name, email, interest, credential, reference, role: 'OU'});
     })
     .then(res => {
-      this.props.firebase.updatePendingUserInfo(email, {rejected: "accept"});
+      this.props.firebase.pendingUser(email).update({rejected: "accept"});;
       this.props.firebase.passwordReset(email);
     })
     .catch(error => {
@@ -45,9 +45,9 @@ class Admin extends Component {
   rejectRegister(userInfo) {
     console.log(userInfo)
     let rejected = userInfo.rejected;
-    if (rejected === "zero") rejected = "once";
+    if (rejected === "zero") rejected = "rejected";
     else rejected = "block";
-    this.props.firebase.updatePendingUserInfo(userInfo.email, {rejected});
+    this.props.firebase.pendingUser(userInfo.email).update({rejected});
   }
 
   render() {

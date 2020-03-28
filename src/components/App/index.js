@@ -9,6 +9,7 @@ import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
+import StatusPage from '../RegisterStatus';
 import { withFirebase } from '../Firebase';
 class App extends Component {
     constructor(props) {
@@ -40,6 +41,7 @@ class App extends Component {
                 <Route path={ROUTES.HOME} component={HomePage} />
                 <Route path={ROUTES.ACCOUNT} component={AccountPage} />
                 <Route path={ROUTES.ADMIN} component={AdminPage} />
+                <Route path={ROUTES.REGISTER_STATUS} component={StatusPage} />
             </div>
         </Router>
         );
