@@ -25,29 +25,15 @@ class StatusPage extends Component {
     onChange = (event) => {
       this.setState({[event.target.name]: event.target.value});
     }
-    
+
+    appeal(){
+
+    }
+
     render() {
       const {email} = this.state;
-      // const SearchForm = () => (
-      //   <form onSubmit={this.search}>
-      //     <h1>Check your status</h1>
-      //     <input
-      //     name="email"
-      //     value={email}
-      //     onChange={this.onChange}
-      //     type="text"
-      //     placeholder="Your email"
-      //     />
-      //     <button type="submit">Search</button>
-      //   </form>
-      // )
-      
-      const Result = () => (
-        <div>
-          <div>{this.state.email}</div>
-          <div>{this.state.rejected}</div>
-        </div>
-      )
+      const canAppeal = this.state.rejected !== 'rejected';
+
       if (!this.state.result) {
         return (
           <form onSubmit={this.search}>
@@ -63,7 +49,15 @@ class StatusPage extends Component {
           </form>
         )
       }
-      else return <Result />
+      else {
+        return (
+          <div>
+            <div>{this.state.email}</div>
+            <div>{this.state.rejected}</div>
+            <button onClick={() => this.appeal()} disabled={canAppeal}>Appeal</button>
+          </div>
+        )
+      }
     }
   }
 
