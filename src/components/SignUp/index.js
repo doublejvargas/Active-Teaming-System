@@ -50,17 +50,33 @@ class SignUpFormBase extends Component {
   //   event.preventDefault();
   // }
 
-  newPendingUser = (event) => {
-    const {name, email, interest, credential, reference} = this.state;
-    this.props.firebase.pendingUser(email)
-    .set({name, email, interest, credential, reference, rejected: "zero"})
+  checkIfUserExist(userEmail) {
+    return this.props.firebase.user(userEmail)
+    .get()
     .then(res => {
-      this.setState({...INITIAL_STATE});
-      this.props.history.push(ROUTES.HOME);
+      if (res.exists) return Promise.resolve(false);
+      else return this.props.firebase.pendingUser(userEmail);
     })
-    .catch(error => {
-      this.setState({error});
-    });
+    .then(res => {
+      if (res.exists) return Promise.resolve(false);
+      else return Promise.resolve(true);
+    })
+  }
+  newPendingUser = async (event) => {
+    const {name, email, interest, credential, reference} = this.state;
+    const userExist = await this.checkIfUserExist(email);
+    if (!userExist) {
+      this.props.firebase.pendingUser(email)
+      .set({name, email, interest, credential, reference, rejected: "zero", date: new Date()})
+      .then(res => {
+        this.setState({...INITIAL_STATE});
+        this.props.history.push(ROUTES.HOME);
+      })
+      .catch(error => {
+        this.setState({error});
+      });
+    }
+    else alert('user exists');
     event.preventDefault();
   }
   

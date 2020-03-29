@@ -31,7 +31,7 @@ class Admin extends Component {
     this.props.firebase.createUserWithEmailAndPassword(email, tempPassword)
     .then(res => {
       return this.props.firebase.user(email)
-              .set({name, email, interest, credential, reference, role: 'OU'});
+              .set({name, email, interest, credential, reference, role: 'OU', date: new Date()});
     })
     .then(res => {
       this.props.firebase.pendingUser(email).update({rejected: "accept"});;
