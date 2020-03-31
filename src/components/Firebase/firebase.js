@@ -17,23 +17,23 @@ class Firebase {
   }
 
   createUserWithEmailAndPassword(email, password) {
-      return this.auth.createUserWithEmailAndPassword(email, password);
+    return this.auth.createUserWithEmailAndPassword(email, password);
   };
 
   signInWithEmailAndPassword(email, password) {
-      return this.auth.signInWithEmailAndPassword(email, password)
+    return this.auth.signInWithEmailAndPassword(email, password);
   };
 
   signOut() {
-      return this.auth.signOut()
+    return this.auth.signOut();
   };
 
   passwordReset(email) {
-      return this.auth.sendPasswordResetEmail(email);
+    return this.auth.sendPasswordResetEmail(email);
   };
 
   user(userEmail) {
-      return this.db.doc(`users/${userEmail}`);
+    return this.db.doc(`users/${userEmail}`);
   }
 
   pendingUser(userEmail) {
