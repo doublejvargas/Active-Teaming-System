@@ -43,9 +43,8 @@ class Admin extends Component {
   }
 
   rejectRegister(userInfo) {
-    console.log(userInfo)
     let rejected = userInfo.rejected;
-    if (rejected === "zero") rejected = "rejected";
+    if (rejected === "init") rejected = "rejected";
     else rejected = "block";
     this.props.firebase.pendingUser(userInfo.email).update({rejected});
   }

@@ -31,52 +31,41 @@ class SignUpFormBase extends Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  // newUser = (event) => {
-  //   const tempPassword = '123456';
-  //   const {name, email, interest, credential, reference} = this.state;
-  //   this.props.firebase.createUserWithEmailAndPassword(email, tempPassword)
-  //   .then(res => {
-  //     return this.props.firebase.user(email)
-  //             .set({name, email, interest, credential, reference, role: 'OU'});
-  //   })
-  //   .then(res => {
-  //     this.setState({...INITIAL_STATE});
-  //     this.props.firebase.passwordReset(email);
-  //     this.props.history.push(ROUTES.HOME);
-  //   })
-  //   .catch(error => {
-  //     this.setState({error});
-  //   });
-  //   event.preventDefault();
-  // }
-
-  checkIfUserExist(userEmail) {
-    return this.props.firebase.user(userEmail)
+  async checkIfUserExist(userEmail) {
+    let userExist = await this.props.firebase.user(userEmail)
     .get()
     .then(res => {
-      if (res.exists) return Promise.resolve(false);
-      else return this.props.firebase.pendingUser(userEmail);
-    })
-    .then(res => {
-      if (res.exists) return Promise.resolve(false);
-      else return Promise.resolve(true);
-    })
+      if (res.exists) return Promise.resolve(true);
+      else return Promise.resolve(false);
+    });
+
+    if (!userExist) {
+      userExist = await this.props.firebase.pendingUser(userEmail)
+      .get()
+      .then(res => {
+        if (res.exists) return Promise.resolve(true);
+        else return Promise.resolve(false);
+      });
+    }
+    
+    return userExist;
   }
   newPendingUser = async (event) => {
     const {name, email, interest, credential, reference} = this.state;
-    const userExist = await this.checkIfUserExist(email);
-    if (!userExist) {
-      this.props.firebase.pendingUser(email)
-      .set({name, email, interest, credential, reference, rejected: "zero", date: new Date()})
-      .then(res => {
-        this.setState({...INITIAL_STATE});
-        this.props.history.push(ROUTES.HOME);
-      })
-      .catch(error => {
-        this.setState({error});
-      });
-    }
-    else alert('user exists');
+    this.checkIfUserExist(email).then(userExist => {
+      if (!userExist) {
+        this.props.firebase.pendingUser(email)
+        .set({name, email, interest, credential, reference, rejected: "init", date: new Date()})
+        .then(res => {
+          this.setState({...INITIAL_STATE});
+          this.props.history.push(ROUTES.HOME);
+        })
+        .catch(error => {
+          this.setState({error});
+        });
+      }
+      else alert('user exists');
+    });
     event.preventDefault();
   }
   

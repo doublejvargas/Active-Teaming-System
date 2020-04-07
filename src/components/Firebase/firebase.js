@@ -42,7 +42,7 @@ class Firebase {
 
   getPendingUsers() {
     return this.db.collection('pendingUsers')
-    .where("rejected","in",["zero", "appeal"]);
+    .where("rejected","in",["init", "appeal"]);
   }
 }
 export default Firebase;
