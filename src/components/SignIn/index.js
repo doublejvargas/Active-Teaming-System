@@ -28,8 +28,24 @@ class SignInFormBase extends Component {
     this.props.firebase
       .signInWithEmailAndPassword(email, password)
       .then(() => {
+        this.props.firebase.user(email).get()
+        .then(res => {
+          const data = res.data()
+          if (data.blocked) {
+            if (data.blocked === 'blocked') {
+              this.props.firebase.signOut();
+              this.setState({error: {message: 'user been blocked!!!'}});
+            }
+            else {
+              this.props.history.push(ROUTES.ACCOUNT);
+              this.props.firebase.user(email).update({blocked: 'blocked'});
+            }
+          }
+          else {
+            this.props.history.push(ROUTES.ACCOUNT);
+          }
+        });
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
         this.setState({ error });

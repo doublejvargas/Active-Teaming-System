@@ -64,7 +64,7 @@ class SignUpFormBase extends Component {
           this.setState({error});
         });
       }
-      else alert('user exists');
+      else this.setState({error: {message: 'user exists!!!'}});
     });
     event.preventDefault();
   }
