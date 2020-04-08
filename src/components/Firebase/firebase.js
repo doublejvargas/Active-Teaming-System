@@ -16,33 +16,24 @@ class Firebase {
     this.db = app.firestore();
   }
 
-  createUserWithEmailAndPassword(email, password) {
-    return this.auth.createUserWithEmailAndPassword(email, password);
-  };
+  createUserWithEmailAndPassword = (email, password) =>
+  this.auth.createUserWithEmailAndPassword(email, password);
 
-  signInWithEmailAndPassword(email, password) {
-    return this.auth.signInWithEmailAndPassword(email, password);
-  };
+  signInWithEmailAndPassword = (email, password) =>
+  this.auth.signInWithEmailAndPassword(email, password);
 
-  signOut() {
-    return app.auth().signOut();
-  };
+  signOut = () => this.auth.signOut();
 
-  passwordReset(email) {
-    return this.auth.sendPasswordResetEmail(email);
-  };
+  passwordReset = email => this.auth.sendPasswordResetEmail(email);
 
-  user(userEmail) {
-    return this.db.doc(`users/${userEmail}`);
-  }
+  user = userEmail => this.db.doc(`users/${userEmail}`);
 
-  pendingUser(userEmail) {
-    return this.db.doc(`pendingUsers/${userEmail}`);
-  }
+  pendingUser = userEmail => this.db.doc(`pendingUsers/${userEmail}`);
 
-  getPendingUsers() {
-    return this.db.collection('pendingUsers')
-    .where("rejected","in",["init", "appeal"]);
-  }
+  getPendingUsers = () => this.db.collection('pendingUsers')
+                          .where("rejected","in",["init", "appeal"]);
+
+  group = () => this.db.collection('groups');
+
 }
 export default Firebase;
