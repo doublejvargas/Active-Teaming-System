@@ -25,7 +25,7 @@ class Firebase {
   };
 
   signOut() {
-    return this.auth.signOut();
+    return app.auth().signOut();
   };
 
   passwordReset(email) {

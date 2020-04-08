@@ -10,42 +10,24 @@ import HomePage from '../Home';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
 import StatusPage from '../RegisterStatus';
-import { withFirebase } from '../Firebase';
-class App extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        authUser: null,
-      };
-    }
-    componentDidMount() {
-        this.unsubscribe = this.props.firebase.auth.onAuthStateChanged(authUser => {
-            authUser
-                ? this.setState({ authUser })
-                : this.setState({ authUser: null })
-        })
-    }
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-    render() {
-      return (
-        <Router>
-            <div>
-                <Navigation authUser={this.state.authUser} />
-                <hr />
-                <Route exact path={ROUTES.LANDING} component={LandingPage} />
-                <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-                <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-                <Route path={ROUTES.HOME} component={HomePage} />
-                <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-                <Route path={ROUTES.ADMIN} component={AdminPage} />
-                <Route path={ROUTES.REGISTER_STATUS} component={StatusPage} />
-            </div>
-        </Router>
-        );
-    }
-}
-
-export default withFirebase(App);
+import { withAuthentication } from '../Session';
+const App = () => (
+    <Router>
+      <div>
+        <Navigation />
+        <hr />
+        <Route exact path={ROUTES.LANDING} component={LandingPage} />
+        <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+        <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+        <Route path={ROUTES.REGISTER_STATUS} component={StatusPage} />
+        <Route
+          path={ROUTES.PASSWORD_FORGET}
+          component={PasswordForgetPage}
+        />
+        <Route path={ROUTES.HOME} component={HomePage} />
+        <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+        <Route path={ROUTES.ADMIN} component={AdminPage} />
+      </div>
+    </Router>
+  );
+  export default withAuthentication(App);
