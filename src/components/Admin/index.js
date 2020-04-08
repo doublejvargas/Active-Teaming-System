@@ -11,8 +11,8 @@ class Admin extends Component {
   componentDidMount () {
     this.pendingListSubcriber = this.props.firebase.getPendingUsers()
     .onSnapshot(users => {
-      if (users.empty) this.setState({list: []});
-      else {
+      this.setState({list: []});
+      if (!users.empty) {
         users.forEach(user => {
         const { list } = this.state;
         this.setState({list: [...list, user.data()]});

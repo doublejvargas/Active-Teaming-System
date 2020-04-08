@@ -26,8 +26,10 @@ class StatusPage extends Component {
       this.setState({[event.target.name]: event.target.value});
     }
 
-    appeal(){
-
+    appeal = () => {
+      this.props.firebase.pendingUser(this.state.email)
+      .update({rejected: 'appeal'});
+      this.setState({result: false});
     }
 
     render() {
@@ -54,7 +56,7 @@ class StatusPage extends Component {
           <div>
             <div>{this.state.email}</div>
             <div>{this.state.rejected}</div>
-            <button onClick={() => this.appeal()} disabled={canAppeal}>Appeal</button>
+            <button onClick={this.appeal} disabled={canAppeal}>Appeal</button>
           </div>
         )
       }
