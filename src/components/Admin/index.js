@@ -14,8 +14,7 @@ class Admin extends Component {
       this.setState({list: []});
       if (!users.empty) {
         users.forEach(user => {
-        const { list } = this.state;
-        this.setState({list: [...list, user.data()]});
+        this.setState((prev) => ({list: [...prev.list, user.data()]}));
         });
       }
     });
