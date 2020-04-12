@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withAuthUser } from '../Session';
-class AccountPage extends Component {
+import { withFirebase } from '../Firebase';
+import { compose } from 'recompose';
+class AccountPageBase extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -8,18 +10,16 @@ class AccountPage extends Component {
 
   componentDidMount() {
     this.setState(this.props.authUser);
-    this.getReferences();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.authUser === null) {
       this.setState(this.props.authUser);
-      this.getReferences();
     }
   }
 
   getReferences = () => {
-    const references = this.state.references;
+    const { references } = this.state;
     if (references) {
       references.foreach(ref => {
         ref.get()
@@ -33,9 +33,45 @@ class AccountPage extends Component {
     }
   }
 
+  onChange = (event) => {
+    this.setState({'score': event.target.value});
+  }
+
+  submitScore = (email) => {
+    const {score} = this.state;
+    this.props.firebase.user(email).update({score})
+    this.props.firebase.user(this.state.email).update({
+      refs: this.props.firebase.app.firestore.FieldValue.arrayRemove(email)
+    })
+    this.setState((prev) => ({
+      prev,
+      refs: prev.refs.filter(ref => ref !== email)
+    }))
+  }
+
   render() {
-    return (<div>{this.state.email}</div>)
+    this.getReferences();
+    let max = 10;
+    if (this.state.role === 'VIP') max = 20;
+    if (this.state.refs) {
+      return this.state.refs.map(email => (
+        <div>
+          <input onChange={this.onChange} type='number' placeholder="score" max={max}/>
+          {email}
+          <button onClick={() => this.submitScore(email)}>comfirm</button>
+        </div>
+        )
+      )
+    }
+    else {
+      return (<div>loading...</div>)
+    }
   }
 }
+
+const AccountPage = compose(
+  withAuthUser,
+  withFirebase,
+)(AccountPageBase);
 
 export default withAuthUser(AccountPage);

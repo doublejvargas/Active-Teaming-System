@@ -24,7 +24,7 @@ class Admin extends Component {
     this.pendingListSubcriber();
   }
 
-  acceptRegister(userInfo) {
+  async acceptRegister(userInfo) {
     const tempPassword = '123456';
     const {name, email, interest, credential, reference} = userInfo;
     this.props.firebase.createUserWithEmailAndPassword(email, tempPassword)
@@ -33,6 +33,12 @@ class Admin extends Component {
               .set({name, email, interest, credential, reference, role: 'OU', date: new Date()});
     })
     .then(res => {
+      this.props.firebase.user(reference).get()
+      .then(user => {
+        if (user.exists){
+          user.ref.update({refs: this.props.firebase.app.firestore.FieldValue.arrayUnion(email)})
+        }
+      });
       this.props.firebase.pendingUser(email).update({rejected: "accept"});;
       this.props.firebase.passwordReset(email);
     })
