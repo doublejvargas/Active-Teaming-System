@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withFirebase } from '../Firebase';
-
 class Admin extends Component {
   constructor(props) {
     super(props);
@@ -27,18 +26,22 @@ class Admin extends Component {
   async acceptRegister(userInfo) {
     const tempPassword = '123456';
     const {name, email, interest, credential, reference} = userInfo;
-    this.props.firebase.createUserWithEmailAndPassword(email, tempPassword)
+    const creatUser = this.props.firebase.app.functions().httpsCallable('createUser');
+    creatUser({ email, tempPassword })
     .then(res => {
       return this.props.firebase.user(email)
-              .set({name, email, interest, credential, reference, role: 'OU', date: new Date()});
+              .set({name, email, interest, credential, reference, role: 'OU', date: new Date(), score: 0});
     })
     .then(res => {
-      this.props.firebase.user(reference).get()
-      .then(user => {
-        if (user.exists){
-          user.ref.update({refs: this.props.firebase.app.firestore.FieldValue.arrayUnion(email)})
-        }
-      });
+      if (reference){
+        this.props.firebase.user(reference).get()
+        .then(user => {
+          if (user.exists){
+            const docRef = this.props.firebase.user(email);
+            user.ref.update({refs: this.props.firebase.app.firestore.FieldValue.arrayUnion(docRef)})
+          }
+        });
+      }
       this.props.firebase.pendingUser(email).update({rejected: "accept"});;
       this.props.firebase.passwordReset(email);
     })

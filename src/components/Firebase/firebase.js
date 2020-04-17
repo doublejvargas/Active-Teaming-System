@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/functions';
 const config = {
     apiKey: "AIzaSyB8YOdZddRMB-rm9p8A6COaolDDTP3oEAo",
     authDomain: "csc322e.firebaseapp.com",
