@@ -58,12 +58,12 @@ class AccountPageBase extends Component {
       references: prev.references.filter((ref) => ref.email !== email),
     }));
   };
-  render() {
+
+  Reference = () => {
     let max = 10;
     if (this.state.role === "VIP") max = 20;
-    let Reference = () => <div></div>;
     if (this.state.references.length) {
-      Reference = this.state.references.map((ref) => (
+      return this.state.references.map((ref) => (
         <div>
           <input
             onChange={(event) => this.onChange(event, ref.email, max)}
@@ -78,17 +78,93 @@ class AccountPageBase extends Component {
           </button>
         </div>
       ));
-    }
+    } else return <></>;
+  };
+
+  render() {
     return (
       <div>
-        <ModalBase firebase={this.props.firebase} />
-        <Reference />
+        <WhiteList
+          currentUserEmail={this.state.email}
+          firebase={this.props.firebase}
+        />
+        <BlackList
+          currentUserEmail={this.state.email}
+          firebase={this.props.firebase}
+        />
+        <Group firebase={this.props.firebase} />
+        <this.Reference />
       </div>
     );
   }
 }
 
-const ModalBase = ({firebase}) => {
+const WhiteList = ({ currentUserEmail, firebase }) => {
+  const [email, setEmail] = useState("");
+  const onChange = (event) => setEmail(event.target.value);
+  const handleAdd = () => {
+    firebase
+      .user(email)
+      .get()
+      .then((res) => {
+        if (res.exists) {
+          firebase.user(currentUserEmail).update({
+            whiteList: firebase.app.firestore.FieldValue.arrayUnion(res.ref),
+          });
+          setEmail('');
+          alert("success!");
+        } else alert("user not exists!");
+      });
+  };
+
+  return (
+    <Form.Row>
+      <Form.Control
+        onChange={onChange}
+        type="email"
+        placeholder="email"
+        value={email}
+      />
+      <Button variant="primary" onClick={handleAdd}>
+        Add
+      </Button>
+    </Form.Row>
+  );
+};
+
+const BlackList = ({ currentUserEmail, firebase }) => {
+  const [email, setEmail] = useState("");
+  const onChange = (event) => setEmail(event.target.value);
+  const handleAdd = () => {
+    firebase
+      .user(email)
+      .get()
+      .then((res) => {
+        if (res.exists) {
+          firebase.user(currentUserEmail).update({
+            blackList: firebase.app.firestore.FieldValue.arrayUnion(res.ref),
+          });
+          setEmail('');
+          alert("success!");
+        } else alert("user not exists!");
+      });
+  };
+  return (
+    <Form.Row>
+      <Form.Control
+        onChange={onChange}
+        type="email"
+        placeholder="email"
+        value={email}
+      />
+      <Button variant="primary" onClick={handleAdd}>
+        Add
+      </Button>
+    </Form.Row>
+  );
+};
+
+const Group = ({ firebase }) => {
   const [groupData, setGroupData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const handleShow = () => setShowModal(!showModal);
@@ -102,11 +178,7 @@ const ModalBase = ({firebase}) => {
       <Button variant="primary" onClick={handleShow}>
         Form a new Group
       </Button>
-      <Modal
-        show={showModal}
-        onHide={handleShow}
-        animation={false}
-      >
+      <Modal show={showModal} onHide={handleShow} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>New Group</Modal.Title>
         </Modal.Header>
