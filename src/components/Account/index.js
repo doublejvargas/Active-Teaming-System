@@ -107,7 +107,7 @@ class AccountPageBase extends Component {
         />
       );
     else if (toggle === "group")
-      return <Group currentUserEmail={this.state.email} firebase={this.props.firebase} />;
+      return <Group currentUserEmail={this.state.email} currentUserGroups = {this.state.groups} firebase={this.props.firebase} />;
   };
 
   render() {

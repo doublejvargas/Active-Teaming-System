@@ -1,15 +1,19 @@
 import { Button, Modal, Form } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export const Group = ({ currentUserEmail, firebase }) => {
+export const Group = ({ currentUserEmail, currentUserGroups, firebase }) => {
   const [groupData, setGroupData] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentInvite, setCurrentInvite] = useState("");
+  const [groups, setGroups] = useState([]);
   const handleShow = () => setShowModal(!showModal);
   const handleFormChange = (event) =>
     setGroupData({ ...groupData, [event.target.name]: event.target.value });
 
+  useEffect(() => {
+    getAllGroups();
+  }, []);
   const handleConfirm = async () => {
     const groupDocRef = firebase.group().doc();
     const currentUserRef = firebase.user(currentUserEmail);
@@ -37,10 +41,10 @@ export const Group = ({ currentUserEmail, firebase }) => {
     }
     firebase.user(currentUserEmail).update({
       groups: firebase.app.firestore.FieldValue.arrayUnion(groupDocRef),
-    })
-    groupDocRef.set({...groupData, members});
+    });
+    groupDocRef.set({ ...groupData, members });
     handleShow();
-    alert('success!!');
+    alert("success!!");
   };
 
   const checkIfInList = (docRef, list) => {
@@ -65,11 +69,30 @@ export const Group = ({ currentUserEmail, firebase }) => {
   const ShowInvitations = () => {
     return invitations.map((invite) => <div>{invite}</div>);
   };
+
+  const getAllGroups = () => {
+    if (currentUserGroups) {
+      currentUserGroups.forEach((group) => {
+        group.get().then((ref) => {
+          setGroups([...groups, ref.data()]);
+        });
+      });
+    }
+  };
+
+  const ShowAllGroups = () => {
+    if (groups) {
+      return groups.map((group) => <div>group name: {group.name}</div>);
+    }
+    return <div></div>;
+  };
+
   return (
     <div>
       <Button variant="primary" onClick={handleShow}>
         Form a new Group
       </Button>
+      <ShowAllGroups />
       <Modal show={showModal} onHide={handleShow} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>New Group</Modal.Title>
