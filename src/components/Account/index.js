@@ -86,7 +86,6 @@ class AccountPageBase extends Component {
 
   toggleChange = (event) => {
     const value = event.target.value;
-    console.log(value);
     this.setState((prev) => ({ toggle: value }));
   };
 
@@ -108,7 +107,7 @@ class AccountPageBase extends Component {
         />
       );
     else if (toggle === "group")
-      return <Group firebase={this.props.firebase} />;
+      return <Group currentUserEmail={this.state.email} firebase={this.props.firebase} />;
   };
 
   render() {
