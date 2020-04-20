@@ -1,5 +1,6 @@
 import { Button, Modal, Form } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
+import { GroupDetail } from '../Group/detail';
 
 export const Group = ({ currentUserEmail, currentUserGroups, firebase }) => {
   const [groupData, setGroupData] = useState([]);
@@ -82,7 +83,7 @@ export const Group = ({ currentUserEmail, currentUserGroups, firebase }) => {
 
   const ShowAllGroups = () => {
     if (groups) {
-      return groups.map((group) => <div>group name: {group.name}</div>);
+      return groups.map((group) => <GroupDetail groupData={group} /> );
     }
     return <div></div>;
   };
