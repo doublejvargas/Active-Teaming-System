@@ -29,7 +29,9 @@ class App extends Component {
           <Route path="/signin" component={SignInPage} />
           <Route path="/signup" component={SignUpPage} />
           <Route path="/status" component={StatusPage} />
-
+          <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+          <Route path={ROUTES.ADMIN} component={AdminPage} />
+          <Route exact path={ROUTES.LANDING} component={LandingPage} />
 
         </Switch>
         <Footer />
