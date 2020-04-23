@@ -55,7 +55,7 @@ class SignUpFormBase extends Component {
     this.checkIfUserExist(email).then(userExist => {
       if (!userExist) {
         this.props.firebase.pendingUser(email)
-        .set({name, email, interest, credential, reference, rejected: "init", date: new Date()})
+        .set({name, email, interest, credential, reference, rejected: "init", createdAt: new Date()})
         .then(res => {
           this.setState({...INITIAL_STATE});
           this.props.history.push(ROUTES.HOME);

@@ -43,7 +43,7 @@ export const Group = ({ currentUserEmail, currentUserGroups, firebase }) => {
     firebase.user(currentUserEmail).update({
       groups: firebase.app.firestore.FieldValue.arrayUnion(groupDocRef),
     });
-    groupDocRef.set({ ...groupData, members });
+    groupDocRef.set({ ...groupData, members, createdAt: new Date() });
     handleShow();
     alert("success!!");
   };
@@ -75,7 +75,7 @@ export const Group = ({ currentUserEmail, currentUserGroups, firebase }) => {
     if (currentUserGroups) {
       currentUserGroups.forEach((group) => {
         group.get().then((ref) => {
-          setGroups([...groups, ref.data()]);
+          setGroups([...groups, {id:ref.id, ...ref.data()}]);
         });
       });
     }

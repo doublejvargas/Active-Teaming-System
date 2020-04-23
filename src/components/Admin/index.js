@@ -30,7 +30,7 @@ class Admin extends Component {
     creatUser({ email, tempPassword })
     .then(res => {
       return this.props.firebase.user(email)
-              .set({name, email, interest, credential, reference, role: 'OU', date: new Date(), score: 0});
+              .set({name, email, interest, credential, reference, role: 'OU', createdAt: new Date(), score: 0});
     })
     .then(res => {
       if (reference){
