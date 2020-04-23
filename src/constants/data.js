@@ -1,0 +1,1 @@
+export const tabooWords = ['fuck', 'shit'];

@@ -1,15 +1,42 @@
 import { Button, Modal, Form } from "react-bootstrap";
 import React, { useState } from "react";
 import { GroupDetail } from "../Group/detail";
+import { withAuthUser } from "../Session";
 import { withFirebase } from "../Firebase";
-const ComplaintModalBase = ({ groupData, firebase, showComplain }) => {
+import { compose } from "recompose";
+import { tabooWords } from "../../constants/data";
+import { TabooSystem } from "../tabooSystem/taboo";
+const ComplaintModalBase = ({
+  groupData,
+  firebase,
+  showComplain,
+  authUser,
+}) => {
   const [showModal, setShowModal] = useState(showComplain);
   const [reason, setReason] = useState("");
   const handleShow = () => setShowModal(!showModal);
 
   const handleConfirm = () => {
     const groupRef = firebase.group().doc(groupData.id);
-    firebase.complain().add({ groupRef, reason, createdAt: new Date() });
+    let newReason = reason;
+    const tabooSaid = [];
+    tabooWords.forEach((word) => {
+      let oldReason = newReason;
+      newReason = newReason.split(word).join("***");
+      if (newReason != oldReason) tabooSaid.push(word);
+    });
+    if (tabooSaid.length > 0 && authUser) {
+      TabooSystem(firebase, authUser, tabooSaid);
+    }
+    firebase
+      .complain()
+      .add({
+        name: groupData.name,
+        groupRef,
+        reason: newReason,
+        createdAt: new Date(),
+        solved: false,
+      });
     handleShow();
     alert("success!!");
   };
@@ -41,4 +68,7 @@ const ComplaintModalBase = ({ groupData, firebase, showComplain }) => {
     </div>
   );
 };
-export const ComplaintModal = withFirebase(ComplaintModalBase);
+export const ComplaintModal = compose(
+  withAuthUser,
+  withFirebase
+)(ComplaintModalBase);
