@@ -59,7 +59,7 @@ const UserDetailBase = ({ userData, pendingUser, firebase, authUser }) => {
   const compliment = () => {
     let sender = 'visitor';
     if(authUser) sender=authUser.email;
-    firebase.compliment().add({sender, createdAt: new Date(), receiver:userData.email});
+    firebase.compliment().add({sender, createdAt: new Date(), receiver:userData.email, solved:false});
     setShow({showDetail: !show.showDetail});
     alert("success");
   }

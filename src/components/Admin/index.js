@@ -3,6 +3,7 @@ import { withFirebase } from "../Firebase";
 import { UserDetail } from "../User/userDetail";
 import { Button } from "react-bootstrap";
 import { ComplaintsList } from "./complaints";
+import { ComplimentList } from "./compliments";
 class Admin extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,11 @@ class Admin extends Component {
   Registration = () => {
     const { list } = this.state;
     return list.map((user) => (
-      <UserDetail userData={user} pendingUser={true} firebase={this.props.firebase} />
+      <UserDetail
+        userData={user}
+        pendingUser={true}
+        firebase={this.props.firebase}
+      />
     ));
   };
 
@@ -44,6 +49,8 @@ class Admin extends Component {
     if (toggle === "registration") return <this.Registration />;
     else if (toggle === "complaints")
       return <ComplaintsList firebase={this.props.firebase} />;
+    else if (toggle === "compliments")
+      return <ComplimentList firebase={this.props.firebase} />;
   };
 
   render() {
@@ -54,6 +61,9 @@ class Admin extends Component {
         </Button>{" "}
         <Button onClick={this.toggleChange} variant="info" value="complaints">
           complaints
+        </Button>{" "}
+        <Button onClick={this.toggleChange} variant="info" value="compliments">
+          compliments
         </Button>{" "}
         <this.ConditionalRender />
       </div>

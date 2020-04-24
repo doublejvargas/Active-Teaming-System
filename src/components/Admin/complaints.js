@@ -11,8 +11,8 @@ export const ComplaintsList = ({ firebase }) => {
     firebase
       .getUnsovledComplaint()
       .get()
-      .then((docs) => {
-        docs.forEach((doc) => {
+      .then((ref) => {
+        ref.docs.forEach((doc) => {
           setComplaints([...complaints, { id: doc.id, ...doc.data() }]);
         });
       });

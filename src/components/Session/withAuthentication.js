@@ -13,7 +13,6 @@ const withAuthentication = (Component) => {
           if (authUser) {
             this.unSubscribeSnapChange = this.props.firebase.user(authUser.email).onSnapshot((user) => {
               const data = user.data();
-              console.log(data)
               this.setState({ authUser: data });
             });
           } else this.setState({ authUser: null });
