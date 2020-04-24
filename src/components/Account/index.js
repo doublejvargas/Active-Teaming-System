@@ -86,7 +86,7 @@ class AccountPageBase extends Component {
 
   toggleChange = (event) => {
     const value = event.target.value;
-    this.setState((prev) => ({ toggle: value }));
+    this.setState({ toggle: value });
   };
 
   ConditionalRender = () => {
