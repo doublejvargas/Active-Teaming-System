@@ -1,6 +1,5 @@
 import { Button, Modal, Form } from "react-bootstrap";
 import React, { useState } from "react";
-import { GroupDetail } from "../Group/detail";
 import { withAuthUser } from "../Session";
 import { withFirebase } from "../Firebase";
 import { compose } from "recompose";
@@ -29,7 +28,7 @@ const ComplaintModalBase = ({
       TabooSystem(firebase, authUser, tabooSaid);
     }
     firebase
-      .complain()
+      .complaint()
       .add({
         name: groupData.name,
         groupRef,
@@ -45,7 +44,7 @@ const ComplaintModalBase = ({
     <div>
       <Modal show={showModal} onHide={handleShow} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>File a complain</Modal.Title>
+          <Modal.Title>File a complaint</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

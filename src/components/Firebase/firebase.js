@@ -37,7 +37,7 @@ class Firebase {
 
   group = () => this.db.collection('groups');
 
-  complain = () => this.db.collection('complain');
+  complaint = () => this.db.collection('complaint');
 
 }
 export default Firebase;
