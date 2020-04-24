@@ -1,29 +1,28 @@
-import React from 'react';
-import AuthUserContext from './context';
-import { withFirebase } from '../Firebase';
-const withAuthentication = Component => {
+import React from "react";
+import AuthUserContext from "./context";
+import { withFirebase } from "../Firebase";
+const withAuthentication = (Component) => {
   class WithAuthentication extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {authUser: null};
+      this.state = { authUser: null };
     }
     componentDidMount() {
-      this.unSubscribe = this.props.firebase.auth.onAuthStateChanged(
-        authUser => {
-          if (authUser){
-            this.props.firebase.user(authUser.email)
-            .get()
-            .then(user => {
-              const data = user.data()
+      this.unSubscribeStateChange = this.props.firebase.auth.onAuthStateChanged(
+        (authUser) => {
+          if (authUser) {
+            this.unSubscribeSnapChange = this.props.firebase.user(authUser.email).onSnapshot((user) => {
+              const data = user.data();
+              console.log(data)
               this.setState({ authUser: data });
-            })
-          }
-          else this.setState({ authUser: null });
-        },
+            });
+          } else this.setState({ authUser: null });
+        }
       );
     }
     componentWillUnmount() {
-      this.unSubscribe();
+      this.unSubscribeStateChange();
+      this.unSubscribeSnapChange();
     }
     render() {
       return (

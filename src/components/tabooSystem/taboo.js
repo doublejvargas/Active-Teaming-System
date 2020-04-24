@@ -1,6 +1,6 @@
 import {ScoreSystem} from './score';
 export const TabooSystem = (firebase, authUser, tabooSaid) => {
-  let { tabooWords, score, role } = authUser;
+  let { tabooWords, score } = authUser;
   if (!tabooWords || tabooWords.length < 1) {
     tabooWords = tabooSaid;
     score -= tabooSaid.length;
