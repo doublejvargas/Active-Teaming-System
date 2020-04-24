@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withFirebase } from "../Firebase";
-import { UserDetail } from "../Account/userDetail";
+import { UserDetail } from "../User/userDetail";
 import { Button } from "react-bootstrap";
 import { ComplaintsList } from "./complaints";
 class Admin extends Component {

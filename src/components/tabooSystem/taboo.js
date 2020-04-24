@@ -1,3 +1,4 @@
+import {ScoreSystem} from './score';
 export const TabooSystem = (firebase, authUser, tabooSaid) => {
   let { tabooWords, score, role } = authUser;
   if (!tabooWords || tabooWords.length < 1) {
@@ -13,17 +14,5 @@ export const TabooSystem = (firebase, authUser, tabooSaid) => {
       }
     }
   }
-  if (role === "VIP" && score < 25) {
-    role = "OU";
-  }
-  let blocked = false;
-  if (score < 0) {
-    blocked = true;
-  }
-  if (blocked)
-    firebase
-      .user(authUser.email)
-      .update({ tabooWords, score, role, blocked, blockedDate: new Date() });
-  else
-    firebase.user(authUser.email).update({ tabooWords, score, role, blocked });
+  ScoreSystem(firebase, authUser, score, tabooWords);
 };

@@ -39,5 +39,6 @@ class Firebase {
 
   complaint = () => this.db.collection('complaint');
 
+  getUnsovledComplaint = () => this.db.collection('complaint').where("solved", "==", false);
 }
 export default Firebase;

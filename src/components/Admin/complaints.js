@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Overlay, Tooltip, Button } from "react-bootstrap";
+import { ScoreSystem } from "../tabooSystem/score";
 export const ComplaintsList = ({ firebase }) => {
   const [complaints, setComplaints] = useState([]);
+
   useEffect(() => {
     getAllComplaints();
   }, []);
   const getAllComplaints = () => {
     firebase
-      .complaint()
-      .where("solved", "==", false)
+      .getUnsovledComplaint()
       .get()
       .then((docs) => {
         docs.forEach((doc) => {
@@ -16,9 +17,54 @@ export const ComplaintsList = ({ firebase }) => {
         });
       });
   };
-  const ComplaintDetail = ({ complaintData, group }) => {
+
+  const ShowAllComplaints = () => {
+    if (complaints) {
+      return complaints.map((complaint) => (
+        <ComplaintDetail
+          complaintData={complaint}
+          group={true}
+          firebase={firebase}
+        />
+      ));
+    }
+    return <div></div>;
+  };
+
+  const ComplaintDetail = ({ complaintData, group, firebase }) => {
     const [showTip, setShowTip] = useState(false);
     const target = useRef(null);
+    const [closeGroup, setCloseGroup] = useState(false);
+    const shutDownGroup = () => {
+      complaintData.groupRef.update({ status: "closed" });
+      setCloseGroup(true);
+    };
+    const deductScore = () => {
+      complaintData.groupRef.get().then((group) => {
+        const { members } = group.data();
+        members.forEach((member) => {
+          member.get().then((doc) => {
+            const data = doc.data();
+            const newScore = data.score - 5;
+            ScoreSystem(firebase, data, newScore, []);
+          });
+        });
+      });
+      updateComplaintStatus();
+    };
+    const blockMembers = () =>{
+      complaintData.groupRef.get().then((group) => {
+        const { members } = group.data();
+        members.forEach((member) => {
+          member.update({blocked:'init'});
+        });
+      });
+      updateComplaintStatus();
+    }
+    const updateComplaintStatus = () => {
+      firebase.complaint().doc(complaintData.id).update({solved:true});
+      setComplaints(complaints.filter(complaint => complaint.name!==complaintData.name));
+    }
     return (
       <div>
         <strong>group name: {complaintData.name}</strong>{" "}
@@ -29,19 +75,24 @@ export const ComplaintsList = ({ firebase }) => {
           <Tooltip>
             <p>group name: {complaintData.name}</p>
             <p>reason: {complaintData.reason}</p>
+            {closeGroup ? (
+              <>
+                <Button variant="warning" onClick={deductScore}>
+                  Deduct members score
+                </Button>
+                <Button variant="warning" onClick={blockMembers}>Block group members</Button>
+              </>
+            ) : (
+              <Button variant="warning" onClick={shutDownGroup}>
+                Shut down the group
+              </Button>
+            )}
+            <Button variant="primary" onClick={updateComplaintStatus}>No actions</Button>
           </Tooltip>
         </Overlay>
       </div>
     );
   };
 
-  const ShowAllComplaints = () => {
-    if (complaints) {
-      return complaints.map((complaint) => (
-        <ComplaintDetail complaintData={complaint} group={true} />
-      ));
-    }
-    return <div></div>;
-  };
   return <ShowAllComplaints />;
 };
