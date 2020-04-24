@@ -36,11 +36,11 @@ export const ComplaintsList = ({ firebase }) => {
     const target = useRef(null);
     const [closeGroup, setCloseGroup] = useState(false);
     const shutDownGroup = () => {
-      complaintData.groupRef.update({ status: "closed" });
+      complaintData.ref.update({ status: "closed" });
       setCloseGroup(true);
     };
     const deductScore = () => {
-      complaintData.groupRef.get().then((group) => {
+      complaintData.ref.get().then((group) => {
         const { members } = group.data();
         members.forEach((member) => {
           member.get().then((doc) => {
@@ -53,7 +53,7 @@ export const ComplaintsList = ({ firebase }) => {
       updateComplaintStatus();
     };
     const blockMembers = () =>{
-      complaintData.groupRef.get().then((group) => {
+      complaintData.ref.get().then((group) => {
         const { members } = group.data();
         members.forEach((member) => {
           member.update({blocked:'init'});

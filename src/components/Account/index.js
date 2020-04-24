@@ -97,6 +97,7 @@ class AccountPageBase extends Component {
         <WhiteList
           currentUserEmail={this.state.email}
           firebase={this.props.firebase}
+          whiteList={this.state.whiteList}
         />
       );
     else if (toggle === "blackList")
@@ -104,6 +105,7 @@ class AccountPageBase extends Component {
         <BlackList
           currentUserEmail={this.state.email}
           firebase={this.props.firebase}
+          blackList={this.state.blackList}
         />
       );
     else if (toggle === "group")

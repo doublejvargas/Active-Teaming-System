@@ -6,17 +6,19 @@ import { compose } from "recompose";
 import { tabooWords } from "../../constants/data";
 import { TabooSystem } from "../tabooSystem/taboo";
 const ComplaintModalBase = ({
-  groupData,
+  data,
   firebase,
   showComplain,
   authUser,
+  type,
 }) => {
   const [showModal, setShowModal] = useState(showComplain);
   const [reason, setReason] = useState("");
   const handleShow = () => setShowModal(!showModal);
 
   const handleConfirm = () => {
-    const groupRef = firebase.group().doc(groupData.id);
+    let ref = firebase.group().doc(data.id);
+    if (type === "user") ref = firebase.user(data.id);
     let newReason = reason;
     const tabooSaid = [];
     tabooWords.forEach((word) => {
@@ -27,15 +29,15 @@ const ComplaintModalBase = ({
     if (tabooSaid.length > 0 && authUser) {
       TabooSystem(firebase, authUser, tabooSaid);
     }
-    firebase
-      .complaint()
-      .add({
-        name: groupData.name,
-        groupRef,
-        reason: newReason,
-        createdAt: new Date(),
-        solved: false,
-      });
+    firebase.complaint().add({
+      name: data.name,
+      ref,
+      reason: newReason,
+      createdAt: new Date(),
+      solved: false,
+      type,
+    });
+
     handleShow();
     alert("success!!");
   };

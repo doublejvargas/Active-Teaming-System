@@ -1,16 +1,17 @@
 import { Overlay, Tooltip, Button } from "react-bootstrap";
 import React, { useState, useRef } from "react";
-
-export const UserDetail = ({ userData, pendingUser, firebase }) => {
-  const [show, setShow] = useState(false);
+import { withAuthUser } from "../Session";
+import {ComplaintModal} from '../complaintSystem/complaint';
+const UserDetailBase = ({ userData, pendingUser, firebase, authUser }) => {
+  const [show, setShow] = useState({showDetail: false, showComplain: false});
   const target = useRef(null);
-
-  const acceptRegister = async() => {
+  const complain = () => {
+    setShow({showDetail: !show.showDetail, showComplain: !show.showComplain});
+  }
+  const acceptRegister = async () => {
     const tempPassword = "123456";
     const { name, email, interest, credential, reference } = userData;
-    const creatUser = firebase.app
-      .functions()
-      .httpsCallable("createUser");
+    const creatUser = firebase.app.functions().httpsCallable("createUser");
     creatUser({ email, tempPassword })
       .then((res) => {
         return firebase.user(email).set({
@@ -33,36 +34,44 @@ export const UserDetail = ({ userData, pendingUser, firebase }) => {
               if (user.exists) {
                 const docRef = firebase.user(email);
                 user.ref.update({
-                  refs: firebase.app.firestore.FieldValue.arrayUnion(
-                    docRef
-                  ),
+                  refs: firebase.app.firestore.FieldValue.arrayUnion(docRef),
                 });
               }
             });
         }
         firebase.pendingUser(email).update({ rejected: "accept" });
         firebase.passwordReset(email);
-        alert('success')
+        alert("success");
       })
       .catch((error) => {
         alert(error);
       });
-  }
+  };
 
   const rejectRegister = () => {
     let rejected = userData.rejected;
     if (rejected === "init") rejected = "rejected";
     else rejected = "block";
     firebase.pendingUser(userData.email).update({ rejected });
-    alert('success');
+    alert("success");
+  };
+
+  const compliment = () => {
+    let sender = 'visitor';
+    if(authUser) sender=authUser.email;
+    firebase.compliment().add({sender, createdAt: new Date(), receiver:userData.email});
+    setShow({showDetail: !show.showDetail});
+    alert("success");
   }
+
   return (
     <div>
       <strong>user name: {userData.name}</strong>{" "}
-      <Button ref={target} onClick={() => setShow(!show)}>
+      <Button ref={target} onClick={() => setShow({showDetail: !show.showDetail})}>
         detail
       </Button>
-      <Overlay target={target.current} show={show} placement="right">
+      {show.showComplain? <ComplaintModal data={userData} showComplain={show.showComplain} type='user'/> : <></>}
+      <Overlay target={target.current} show={show.showDetail} placement="right">
         <Tooltip>
           <p>name: {userData.name}</p>
           <p>email: {userData.email}</p>
@@ -70,13 +79,18 @@ export const UserDetail = ({ userData, pendingUser, firebase }) => {
           <p>credential: {userData.credential}</p>
           {pendingUser ? (
             <>
-              <Button variant="primary" onClick={acceptRegister}>Accept</Button>
-              <Button variant="warning" onClick={rejectRegister}>Reject</Button>
+              <Button variant="primary" onClick={acceptRegister}>
+                Accept
+              </Button>
+              <Button variant="warning" onClick={rejectRegister}>
+                Reject
+              </Button>
             </>
           ) : (
             <>
               <p>role: {userData.role}</p>
-              <Button variant="warning">report</Button>
+              <Button variant="warning" onClick={complain}>Complain</Button>
+              <Button variant="primary" onClick={compliment}>Compliment</Button>
             </>
           )}
         </Tooltip>
@@ -84,3 +98,5 @@ export const UserDetail = ({ userData, pendingUser, firebase }) => {
     </div>
   );
 };
+
+export const UserDetail = withAuthUser(UserDetailBase);
