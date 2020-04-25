@@ -75,7 +75,7 @@ export const Group = ({ currentUserEmail, currentUserGroups, firebase }) => {
     if (currentUserGroups) {
       currentUserGroups.forEach((group) => {
         group.get().then((ref) => {
-          setGroups([...groups, {id:ref.id, ...ref.data()}]);
+          setGroups(prev => [...prev, {id:ref.id, ...ref.data()}]);
         });
       });
     }

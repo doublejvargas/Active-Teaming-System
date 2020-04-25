@@ -23,7 +23,7 @@ export const WhiteList = ({ currentUserEmail, firebase, whiteList }) => {
     if (whiteList) {
       whiteList.forEach((user) => {
         user.get().then((ref) => {
-          setList([...list, { id: ref.id, ...ref.data() }]);
+          setList(prev => [...prev, { id: ref.id, ...ref.data() }]);
         });
       });
     }

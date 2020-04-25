@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Overlay, Tooltip, Button } from "react-bootstrap";
+import { ScoreSystem } from "../tabooSystem/score";
 export const ComplimentList = ({ firebase }) => {
   const [compliments, setCompliments] = useState([]);
 
@@ -12,7 +13,7 @@ export const ComplimentList = ({ firebase }) => {
       .get()
       .then((ref) => {
         ref.docs.forEach((doc) => {
-          setCompliments([...compliments, { id: doc.id, ...doc.data() }]);
+          setCompliments((prev) => [...prev, { id: doc.id, ...doc.data() }]);
         });
       });
   };
@@ -30,7 +31,15 @@ export const ComplimentList = ({ firebase }) => {
     const [showTip, setShowTip] = useState(false);
     const target = useRef(null);
     const reward = () => {
-      firebase.compliment().doc(complimentData.id).update({ solved: true });
+      firebase
+        .user(complimentData.receiver)
+        .get()
+        .then((user) => {
+          const data = user.data();
+          const score = data.score + 3;
+          ScoreSystem(firebase, data, score, []);
+        });
+      updateComplaintStatus();
     };
     const updateComplaintStatus = () => {
       firebase.compliment().doc(complimentData.id).update({ solved: true });

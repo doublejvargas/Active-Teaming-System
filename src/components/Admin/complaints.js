@@ -13,7 +13,7 @@ export const ComplaintsList = ({ firebase }) => {
       .get()
       .then((ref) => {
         ref.docs.forEach((doc) => {
-          setComplaints([...complaints, { id: doc.id, ...doc.data() }]);
+          setComplaints(prev => [...prev, { id: doc.id, ...doc.data() }]);
         });
       });
   };
