@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import { Group } from "./Group";
 import { WhiteList } from "./WhiteList";
 import { BlackList } from "./BlackList";
+import { Invitation } from "./invitation";
 class AccountPageBase extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +52,7 @@ class AccountPageBase extends Component {
   };
 
   submitScore = (email, score) => {
-    this.props.firebase.user(email).update({ score });
+    this.props.firebase.user(email).update({ score: parseInt(score) });
     const docRef = this.props.firebase.user(email);
     this.props.firebase.user(this.state.email).update({
       refs: this.props.firebase.app.firestore.FieldValue.arrayRemove(docRef),
@@ -110,7 +111,8 @@ class AccountPageBase extends Component {
       );
     else if (toggle === "group")
       return <Group currentUserEmail={this.state.email} currentUserGroups = {this.state.groups} firebase={this.props.firebase} />;
-  };
+  else if (toggle === 'invitation') return <Invitation />
+    };
 
   render() {
     return (
@@ -126,6 +128,9 @@ class AccountPageBase extends Component {
         </Button>{" "}
         <Button onClick={this.toggleChange} variant="info" value="group">
           group
+        </Button>{" "}
+        <Button onClick={this.toggleChange} variant="info" value="invitation">
+        invitation
         </Button>
         <this.ConditionalRender />
       </div>
@@ -134,4 +139,4 @@ class AccountPageBase extends Component {
 }
 const AccountPage = compose(withAuthUser, withFirebase)(AccountPageBase);
 
-export default withAuthUser(AccountPage);
+export default AccountPage;

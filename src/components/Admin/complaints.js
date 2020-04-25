@@ -13,7 +13,7 @@ export const ComplaintsList = ({ firebase }) => {
       .get()
       .then((ref) => {
         ref.docs.forEach((doc) => {
-          setComplaints(prev => [...prev, { id: doc.id, ...doc.data() }]);
+          setComplaints((prev) => [...prev, { id: doc.id, ...doc.data() }]);
         });
       });
   };
@@ -36,7 +36,7 @@ export const ComplaintsList = ({ firebase }) => {
     const target = useRef(null);
     const [closeGroup, setCloseGroup] = useState(false);
     const shutDownGroup = () => {
-      complaintData.ref.update({ status: "closed" });
+      complaintData.ref.update({ status: "closed", closedAt: new Date() });
       setCloseGroup(true);
     };
     const deductScore = () => {
@@ -52,19 +52,21 @@ export const ComplaintsList = ({ firebase }) => {
       });
       updateComplaintStatus();
     };
-    const blockMembers = () =>{
+    const blockMembers = () => {
       complaintData.ref.get().then((group) => {
         const { members } = group.data();
         members.forEach((member) => {
-          member.update({blocked:'init'});
+          member.update({ blocked: "init" });
         });
       });
       updateComplaintStatus();
-    }
+    };
     const updateComplaintStatus = () => {
-      firebase.complaint().doc(complaintData.id).update({solved:true});
-      setComplaints(complaints.filter(complaint => complaint.name!==complaintData.name));
-    }
+      firebase.complaint().doc(complaintData.id).update({ solved: true });
+      setComplaints(
+        complaints.filter((complaint) => complaint.name !== complaintData.name)
+      );
+    };
     return (
       <div>
         <strong>group name: {complaintData.name}</strong>{" "}
@@ -80,14 +82,18 @@ export const ComplaintsList = ({ firebase }) => {
                 <Button variant="warning" onClick={deductScore}>
                   Deduct members score
                 </Button>
-                <Button variant="warning" onClick={blockMembers}>Block group members</Button>
+                <Button variant="warning" onClick={blockMembers}>
+                  Block group members
+                </Button>
               </>
             ) : (
               <Button variant="warning" onClick={shutDownGroup}>
                 Shut down the group
               </Button>
             )}
-            <Button variant="primary" onClick={updateComplaintStatus}>No actions</Button>
+            <Button variant="primary" onClick={updateComplaintStatus}>
+              No actions
+            </Button>
           </Tooltip>
         </Overlay>
       </div>

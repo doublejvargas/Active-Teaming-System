@@ -9,10 +9,10 @@ const UserDetailBase = ({ userData, pendingUser, firebase, authUser }) => {
     setShow({showDetail: !show.showDetail, showComplain: !show.showComplain});
   }
   const acceptRegister = async () => {
-    const tempPassword = "123456";
+    const password = "123456";
     const { name, email, interest, credential, reference } = userData;
     const creatUser = firebase.app.functions().httpsCallable("createUser");
-    creatUser({ email, tempPassword })
+    creatUser({ email, password })
       .then((res) => {
         return firebase.user(email).set({
           name,
