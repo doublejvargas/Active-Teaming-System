@@ -72,4 +72,6 @@ const FooterContainer = styled.footer`
     ul li a:hover {
         color: rgba(172,172,172);
     }
+
 `;
+
