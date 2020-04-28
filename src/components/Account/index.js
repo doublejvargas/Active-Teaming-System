@@ -40,6 +40,7 @@ class AccountPageBase extends Component {
   onChange = (event, email, max) => {
     let value = event.target.value;
     if (value > max) value = max;
+    if (value < 0) value = 0;
     this.setState((prev) => ({
       prev,
       references: prev.references.map((ref) => {
