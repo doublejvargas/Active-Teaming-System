@@ -16,8 +16,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../layouts/Navbar';
 import Footer from '../layouts/Footer';
 import { Switch } from 'react-router-dom';
+
 // import pages
 import Home from '../Home/';
+import GroupPage from '../Group/groupPage'
 
 class App extends Component {
   render() {
@@ -29,6 +31,7 @@ class App extends Component {
           <Route path="/signin" component={SignInPage} />
           <Route path="/signup" component={SignUpPage} />
           <Route path="/status" component={StatusPage} />
+          <Route path="/group/:id" component={GroupPage} />
           <Route path={ROUTES.ACCOUNT} component={AccountPage} />
           <Route path={ROUTES.ADMIN} component={AdminPage} />
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
