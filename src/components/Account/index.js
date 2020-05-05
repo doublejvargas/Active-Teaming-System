@@ -142,15 +142,8 @@ class AccountPageBase extends Component {
     );
   }
 }
-// const AccountPage = compose(withAuthUser, withFirebase)(AccountPageBase);
+const AccountPage = compose(withAuthUser, withFirebase)(AccountPageBase);
 
-const AccountPage = () => (
-  <div>
-    <h1>Account Page</h1>
-    <PasswordForgetForm />
-    <PasswordChangeForm />
-  </div>
-);
 
 
 export default AccountPage;

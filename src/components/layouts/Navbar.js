@@ -76,6 +76,24 @@ function NavigationNonAuth() {
           Registration Status
         </Link>
       </li>
+      <li className="nav-item active">
+        <Link
+          className="nav-link text-white text-uppercase ml-5"
+          to={ROUTES.ACCOUNT}
+        >
+          ACCOUNT
+          <span class="sr-only">(current)</span>
+        </Link>
+      </li>
+      <li className="nav-item active">
+        <Link
+          className="nav-link text-white text-uppercase ml-5"
+          to={ROUTES.ADMIN}
+        >
+          ADMIN
+          <span class="sr-only">(current)</span>
+        </Link>
+      </li>
     </ul>
   );
 }
