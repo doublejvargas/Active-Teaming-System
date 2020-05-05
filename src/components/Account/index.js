@@ -7,6 +7,10 @@ import { Group } from "./Group";
 import { WhiteList } from "./WhiteList";
 import { BlackList } from "./BlackList";
 import { Invitation } from "./invitation";
+
+import { PasswordForgetForm } from '../PasswordForget';
+import PasswordChangeForm from '../PasswordChange';
+
 class AccountPageBase extends Component {
   constructor(props) {
     super(props);
@@ -111,9 +115,9 @@ class AccountPageBase extends Component {
         />
       );
     else if (toggle === "group")
-      return <Group currentUserEmail={this.state.email} currentUserGroups = {this.state.groups} firebase={this.props.firebase} />;
-  else if (toggle === 'invitation') return <Invitation />
-    };
+      return <Group currentUserEmail={this.state.email} currentUserGroups={this.state.groups} firebase={this.props.firebase} />;
+    else if (toggle === 'invitation') return <Invitation />
+  };
 
   render() {
     return (
@@ -131,13 +135,22 @@ class AccountPageBase extends Component {
           group
         </Button>{" "}
         <Button onClick={this.toggleChange} variant="info" value="invitation">
-        invitation
+          invitation
         </Button>
         <this.ConditionalRender />
       </div>
     );
   }
 }
-const AccountPage = compose(withAuthUser, withFirebase)(AccountPageBase);
+// const AccountPage = compose(withAuthUser, withFirebase)(AccountPageBase);
+
+const AccountPage = () => (
+  <div>
+    <h1>Account Page</h1>
+    <PasswordForgetForm />
+    <PasswordChangeForm />
+  </div>
+);
+
 
 export default AccountPage;

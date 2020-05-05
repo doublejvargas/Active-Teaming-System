@@ -1,16 +1,13 @@
-import React, { Component } from 'react'
-import * as ROUTES from '../../constants/routes';
-import { Link, withRouter } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import { withFirebase } from '../Firebase';
-import { compose } from 'recompose';
-
-
+import * as ROUTES from '../../constants/routes';
 
 const PasswordForgetPage = () => (
   <div>
-    <h1>Password forget</h1>
-    <PasswordResetForm />
-
+    <h1>PasswordForget</h1>
+    <PasswordForgetForm />
   </div>
 );
 
@@ -19,95 +16,64 @@ const INITIAL_STATE = {
   error: null,
 };
 
-
-class PasswordResetFormBase extends Component {
-
+class PasswordForgetFormBase extends Component {
   constructor(props) {
     super(props);
+
     this.state = { ...INITIAL_STATE };
   }
 
-  onChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  }
+  onSubmit = event => {
+    const { email } = this.state;
 
-  async checkIfUserExist(userEmail) {
-    let userExist = await this.props.firebase.user(userEmail)
-      .get()
-      .then(res => {
-        if (res.exists) return Promise.resolve(true);
-        else return Promise.resolve(false);
+    this.props.firebase
+      .doPasswordReset(email)
+      .then(() => {
+        this.setState({ ...INITIAL_STATE });
+      })
+      .catch(error => {
+        this.setState({ error });
       });
 
-    if (!userExist) {
-      userExist = await this.props.firebase.pendingUser(userEmail)
-        .get()
-        .then(res => {
-          if (res.exists) return Promise.resolve(true);
-          else return Promise.resolve(false);
-        });
-    }
-
-    return userExist;
-  }
-  newPendingUser = async (event) => {
-    const { name, email, interest, credential, reference } = this.state;
-    this.checkIfUserExist(email).then(userExist => {
-      if (!userExist) {
-        this.props.firebase.pendingUser(email)
-          .set({ name, email, interest, credential, reference, rejected: "init", createdAt: new Date() })
-          .then(res => {
-            this.setState({ ...INITIAL_STATE });
-            this.props.history.push(ROUTES.HOME);
-          })
-          .catch(error => {
-            this.setState({ error });
-          });
-      }
-      else this.setState({ error: { message: 'user exists!!!' } });
-    });
     event.preventDefault();
-  }
+  };
+
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   render() {
-    const {
-      email,
-      error,
-    } = this.state;
-    const isInvalid =
-      email === '';
-    return (
-      <form onSubmit={this.newPendingUser}>
+    const { email, error } = this.state;
 
+    const isInvalid = email === '';
+
+    return (
+      <form onSubmit={this.onSubmit}>
         <input
           name="email"
-          value={email}
+          value={this.state.email}
           onChange={this.onChange}
           type="text"
           placeholder="Email Address"
         />
+        <button disabled={isInvalid} type="submit">
+          Reset My Password
+        </button>
 
-
-        <button type="submit" disabled={isInvalid}>Send email</button>
         {error && <p>{error.message}</p>}
       </form>
-    )
+    );
   }
 }
 
-const PasswordResetForm = compose(
-  withRouter,
-  withFirebase,
-)(PasswordResetFormBase);
-
-
 const PasswordForgetLink = () => (
   <p>
-    Forgot your password? <Link to={ROUTES.PASSWORD_FORGET}>Reset your password</Link>
+    <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
   </p>
 );
 
-
-
 export default PasswordForgetPage;
-export { PasswordResetForm, PasswordForgetLink };
+
+const PasswordForgetForm = withFirebase(PasswordForgetFormBase);
+
+export { PasswordForgetForm, PasswordForgetLink };
