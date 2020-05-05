@@ -5,7 +5,6 @@ import { compose } from "recompose";
 import { GroupDetail } from "../Group/detail";
 const InvitationBase = ({ authUser, firebase }) => {
   const [invitations, setInvitations] = useState([]);
-  const [inviteLength, setInviteLength] = useState({});
   const getAllInvitations = () => {
     const { pendingGroups } = authUser;
     if (pendingGroups) {
@@ -19,7 +18,7 @@ const InvitationBase = ({ authUser, firebase }) => {
   useEffect(() => {
     setInvitations([],getAllInvitations());
     
-  }, [authUser.pendingGroups.length]);
+  }, [authUser.pendingGroups? authUser.pendingGroups.length: 0]);
   const ShowInvitations = () => {
     if (invitations) {
       return invitations.map((groupData) => (

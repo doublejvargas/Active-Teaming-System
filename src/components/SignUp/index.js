@@ -89,35 +89,35 @@ class SignUpFormBase extends Component {
           onChange={this.onChange}
           type="text"
           placeholder="Full Name"
-        />
+        /><br/>
         <input
           name="email"
           value={email}
           onChange={this.onChange}
           type="text"
           placeholder="Email Address"
-        />
+        /><br/>
         <input
           name="interest"
           value={interest}
           onChange={this.onChange}
           type="text"
           placeholder="Interest"
-        />
+        /><br/>
         <input
           name="credential"
           value={credential}
           onChange={this.onChange}
           type="text"
           placeholder="Credential"
-        />
+        /><br/>
         <input
           name="reference"
           value={reference}
           onChange={this.onChange}
           type="text"
           placeholder="Reference"
-        />
+        /><br/>
         <button type="submit" disabled={isInvalid}>Sign Up</button>
         {error && <p>{error.message}</p>}
       </form>

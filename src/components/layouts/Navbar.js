@@ -2,6 +2,7 @@ import React from "react";
 import { AuthUserContext } from "../Session";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
+import SignOut from '../SignOut';
 {
   /* when we have logo as svg file,
     do import logo from '../logo.svg';  */
@@ -108,6 +109,7 @@ function NavigationAuth() {
           Admin
         </Link>
       </li>
+      <SignOut />
     </ul>
   );
 }

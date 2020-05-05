@@ -16,8 +16,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../layouts/Navbar';
 import Footer from '../layouts/Footer';
 import { Switch } from 'react-router-dom';
+
 // import pages
 import Home from '../Home/';
+import GroupPage from '../Group/groupPage'
 
 
 

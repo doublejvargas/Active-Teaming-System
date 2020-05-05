@@ -8,6 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { InfoProvider } from './components/Context/Context';
 
+// import { InfoProvider } from './components/Context/Context'
+
 
 
 ReactDOM.render(

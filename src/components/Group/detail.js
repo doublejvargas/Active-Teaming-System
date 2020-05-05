@@ -1,12 +1,17 @@
 import { Overlay, Tooltip, Button } from "react-bootstrap";
 import React, { useState, useRef } from "react";
 import { ComplaintModal } from "../complaintSystem/complaint";
+import { Link } from 'react-router-dom';
+
 export const GroupDetail = ({ groupData, invite, firebase, authUser }) => {
+
   const [show, setShow] = useState({ showDetail: false, showComplain: false });
   const target = useRef(null);
+
   const complain = () => {
     setShow({ showDetail: !show.showDetail, showComplain: !show.showComplain });
   };
+
   const removeGroup = () => {
     const groupRef = firebase.group().doc(groupData.id);
     firebase.user(authUser.email).update({
@@ -14,6 +19,7 @@ export const GroupDetail = ({ groupData, invite, firebase, authUser }) => {
     });
     alert('success')
   };
+
   const accept = () => {
     const groupRef = firebase.group().doc(groupData.id);
     const userRef = firebase.user(authUser.email);
@@ -25,6 +31,7 @@ export const GroupDetail = ({ groupData, invite, firebase, authUser }) => {
     });
     removeGroup();
   };
+
   return (
     <div>
       <strong>group name: {groupData.name}</strong>{" "}
@@ -34,6 +41,9 @@ export const GroupDetail = ({ groupData, invite, firebase, authUser }) => {
       >
         detail
       </Button>
+
+      <Link to={`/group/${groupData.id}`}><button>Go</button></Link>
+
       {show.showComplain ? (
         <ComplaintModal
           data={groupData}
