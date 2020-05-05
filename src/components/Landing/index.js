@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { InfoConsumer } from '../Context/Context'
 
 const Landing = () => (
   <div>

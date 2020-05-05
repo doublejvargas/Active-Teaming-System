@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PasswordlessAuthComponent } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Navigation from '../Navigation';
 import * as ROUTES from '../../constants/routes';
@@ -19,6 +19,8 @@ import { Switch } from 'react-router-dom';
 // import pages
 import Home from '../Home/';
 
+
+
 class App extends Component {
   render() {
     return (
@@ -29,6 +31,7 @@ class App extends Component {
           <Route path="/signin" component={SignInPage} />
           <Route path="/signup" component={SignUpPage} />
           <Route path="/status" component={StatusPage} />
+          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
           <Route path={ROUTES.ACCOUNT} component={AccountPage} />
           <Route path={ROUTES.ADMIN} component={AdminPage} />
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
