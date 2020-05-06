@@ -84,7 +84,13 @@ const UserDetailBase = ({
       .update({
         votes: firebase.app.firestore.FieldValue.arrayUnion(voteRef),
       });
-    voteRef.set({ target: userRef, yes: 0, no: 0, voted: [], type: voteType });
+    voteRef.set({
+      target: userRef,
+      yes: [firebase.user(authUser.email)],
+      no: [],
+      type: voteType,
+      createdAt: new Date(),
+    });
     setShow({ showDetail: !show.showDetail });
     alert("success");
   };

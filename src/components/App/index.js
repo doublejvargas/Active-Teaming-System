@@ -37,7 +37,7 @@ class App extends Component {
           <Route path={"/account"} component={AccountPage} />
           <Route path={"/admin"} component={AdminPage} />
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
-
+          <Route path="/group/:id" component={GroupPage} />
         </Switch>
         <Footer />
       </div>
