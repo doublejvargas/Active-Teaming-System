@@ -82,7 +82,7 @@ export const Group = ({ currentUserEmail, currentUserGroups, firebase }) => {
   };
 
   const ShowAllGroups = () => {
-    if (groups) {
+    if (groups.length > 0) {
       return groups.map((group) => <GroupDetail groupData={group} /> );
     }
     return <div></div>;

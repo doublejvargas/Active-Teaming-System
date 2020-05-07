@@ -46,5 +46,7 @@ class Firebase {
   getUnsovledCompliment = () => this.db.collection('compliment').where("solved", "==", false);
 
   vote = () => this.db.collection('vote');
+
+  task = groupId => this.group().doc(groupId).collection('task');
 }
 export default Firebase;

@@ -20,7 +20,7 @@ const InvitationBase = ({ authUser, firebase }) => {
     
   }, [authUser.pendingGroups? authUser.pendingGroups.length: 0]);
   const ShowInvitations = () => {
-    if (invitations) {
+    if (invitations.length>0) {
       return invitations.map((groupData) => (
         <GroupDetail groupData={groupData} firebase={firebase} invite={true} authUser={authUser}/>
       ));

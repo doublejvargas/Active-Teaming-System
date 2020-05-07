@@ -19,7 +19,7 @@ export const ComplimentList = ({ firebase }) => {
   };
 
   const ShowAllComplaints = () => {
-    if (compliments) {
+    if (compliments.length > 0) {
       return compliments.map((compliment) => (
         <ComplimentDetail complimentData={compliment} firebase={firebase} />
       ));

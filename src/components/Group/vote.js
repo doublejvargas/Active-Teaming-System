@@ -21,7 +21,7 @@ const VoteBase = ({ firebase, groupId, groupVotes, authUser, members }) => {
     getVotes();
   }, []);
   const ShowVotes = () => {
-    if (votes) {
+    if (votes.length > 0) {
       return votes.map((vote) => <VoteDetail vote={vote} />);
     }
     return <div></div>;

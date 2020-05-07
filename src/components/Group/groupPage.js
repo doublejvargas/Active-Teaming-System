@@ -7,6 +7,7 @@ import { compose } from "recompose";
 import { UserDetail } from "../User/userDetail";
 import { Button, Modal, Form } from "react-bootstrap";
 import { Vote } from "./vote";
+import { Task } from "./task";
 class GroupPageBase extends Component {
   constructor(props) {
     super();
@@ -16,7 +17,7 @@ class GroupPageBase extends Component {
       groupId: "",
       members: [],
       groupName: "",
-      toggle: "",
+      toggle: "main",
     };
   }
 
@@ -29,7 +30,6 @@ class GroupPageBase extends Component {
       .get()
       .then(async (res) => {
         const data = res.data();
-
         const members = [];
 
         for (let i = 0; i < data.members.length; i++) {
@@ -37,19 +37,54 @@ class GroupPageBase extends Component {
             members.push(member.data());
           });
         }
-        
+
         this.setState({
           loading: false,
           groupId: id,
           members: members,
           groupName: data.name,
           public: data.public,
-          votes: data.votes
+          votes: data.votes,
         });
       })
       .catch((error) => console.log(error));
   };
 
+  MainPage = () => {
+    return (
+      <>
+        <br />
+        <div className="text-center">
+          <Button variant="outline-info">Schedule Meeting</Button>{" "}
+          <Button variant="outline-danger">Close Group</Button>
+        </div>
+        <br />
+        <div>
+          <h3 className="text-center">Recent Posting</h3>
+          <GroupPost id={this.state.groupId} />
+        </div>
+      </>
+    );
+  };
+
+  ConditionalRender = () => {
+    if (this.state.toggle === "main") {
+      return <this.MainPage />;
+    } else if (this.state.toggle === "votes") {
+      return (
+        <div className="text-center">
+          <br />
+          <Vote
+            groupVotes={this.state.votes}
+            groupId={this.state.groupId}
+            members={this.state.members}
+          />
+        </div>
+      );
+    } else if (this.state.toggle === "tasks") {
+      return <Task groupId={this.state.groupId} members={this.state.members} />;
+    }
+  };
   render() {
     if (this.state.loading) {
       return <Loading />;
@@ -62,6 +97,12 @@ class GroupPageBase extends Component {
             Hello! This is Group <em>{this.state.groupName}</em>
           </h2>
           <div className="text-center">
+            <Button
+              variant="info"
+              onClick={() => this.setState({ toggle: "main" })}
+            >
+              main page
+            </Button>{" "}
             <Button
               variant="info"
               onClick={() => this.setState({ toggle: "votes" })}
@@ -83,26 +124,8 @@ class GroupPageBase extends Component {
               groupId={this.state.groupId}
             />
           ))}
+          <this.ConditionalRender />
         </div>
-        {this.state.toggle === "votes" ? (
-          <div className="text-center">
-          <br />
-            <Vote groupVotes={this.state.votes} groupId={this.state.groupId} members={this.state.members}/>
-          </div>
-        ) : (
-          <>
-            <br />
-            <div className="text-center">
-              <Button variant="outline-info">Schedule Meeting</Button>{" "}
-              <Button variant="outline-danger">Close Group</Button>
-            </div>
-            <br />
-            <div>
-              <h3 className="text-center">Recent Posting</h3>
-              <GroupPost id={this.state.groupId} />
-            </div>
-          </>
-        )}
       </div>
     );
   }

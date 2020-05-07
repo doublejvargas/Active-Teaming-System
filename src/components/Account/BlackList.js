@@ -18,7 +18,7 @@ export const BlackList = ({ currentUserEmail, firebase, blackList }) => {
     getTheList();
   }, []);
   const ShowTheList = () => {
-    if (list) {
+    if (list.length > 0) {
       return list.map((user) => (
         <UserDetail userData={user} pendingUser={false} firebase={firebase} />
       ));
