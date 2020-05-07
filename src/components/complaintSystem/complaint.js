@@ -26,7 +26,7 @@ const ComplaintModalBase = ({
       newReason = newReason.split(word).join("***");
       if (newReason != oldReason) tabooSaid.push(word);
     });
-    if (tabooSaid.length > 0 && authUser) {
+    if (tabooSaid && tabooSaid.length > 0 && authUser) {
       TabooSystem(firebase, authUser, tabooSaid);
     }
     firebase.complaint().add({

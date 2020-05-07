@@ -71,7 +71,7 @@ class AccountPageBase extends Component {
   Reference = () => {
     let max = 10;
     if (this.state.role === "VIP") max = 20;
-    if (this.state.references.length) {
+    if (this.state.references.length && this.state.references.length > 0) {
       return this.state.references.map((ref) => (
         <div>
           <input

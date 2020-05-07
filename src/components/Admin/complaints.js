@@ -19,7 +19,7 @@ export const ComplaintsList = ({ firebase }) => {
   };
 
   const ShowAllComplaints = () => {
-    if (complaints.length > 0) {
+    if (complaints && complaints.length > 0) {
       return complaints.map((complaint) => (
         <ComplaintDetail
           complaintData={complaint}

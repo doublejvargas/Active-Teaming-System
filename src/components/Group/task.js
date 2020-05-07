@@ -26,10 +26,10 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
   };
   useEffect(() => {
     getTasks();
-  }, [tasks.length === 0 ? tasks.length : 0]);
+  }, [tasks && tasks.length === 0 ? tasks.length : 0]);
 
   const ShowTasks = () => {
-    if (tasks.length > 0) {
+    if (tasks && tasks.length > 0) {
       return tasks.map((task) => (
         <TaskDetail
           task={task}
