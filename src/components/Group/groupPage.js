@@ -8,16 +8,15 @@ import { UserDetail } from "../User/userDetail";
 import { Button, Modal, Form } from "react-bootstrap";
 import { Vote } from "./vote";
 import { Task } from "./task";
+import { EvaluateMembers } from "./evaluateMembers";
 class GroupPageBase extends Component {
   constructor(props) {
     super();
 
     this.state = {
       loading: true,
-      groupId: "",
-      members: [],
-      groupName: "",
       toggle: "main",
+      modalShow: false,
     };
   }
 
@@ -41,10 +40,8 @@ class GroupPageBase extends Component {
         this.setState({
           loading: false,
           groupId: id,
+          ...data,
           members: members,
-          groupName: data.name,
-          public: data.public,
-          votes: data.votes,
         });
       })
       .catch((error) => console.log(error));
@@ -56,7 +53,9 @@ class GroupPageBase extends Component {
         <br />
         <div className="text-center">
           <Button variant="outline-info">Schedule Meeting</Button>{" "}
-          <Button variant="outline-danger">Close Group</Button>
+          <Button variant="outline-danger" onClick={this.handleShowModal}>
+            Close Group
+          </Button>
         </div>
         <br />
         <div>
@@ -69,6 +68,14 @@ class GroupPageBase extends Component {
 
   ConditionalRender = () => {
     if (this.state.toggle === "main") {
+      if (this.state.status && !this.state.memberEval) {
+        return (
+          <EvaluateMembers
+            groupId={this.state.groupId}
+            members={this.state.members}
+          />
+        );
+      }
       return <this.MainPage />;
     } else if (this.state.toggle === "votes") {
       return (
@@ -85,6 +92,32 @@ class GroupPageBase extends Component {
       return <Task groupId={this.state.groupId} members={this.state.members} />;
     }
   };
+
+  handleShowModal = () => {
+    this.setState({ modalShow: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ modalShow: false });
+  };
+
+  closeGroup = () => {
+    const voteRef = this.props.firebase.vote().doc();
+    const groupRef = this.props.firebase.group().doc(this.state.groupId);
+    groupRef.update({
+      votes: this.props.firebase.app.firestore.FieldValue.arrayUnion(voteRef),
+    });
+    voteRef.set({
+      target: groupRef,
+      yes: [this.props.firebase.user(this.props.authUser.email)],
+      no: [],
+      type: "close group",
+      createdAt: new Date(),
+    });
+    this.handleCloseModal();
+    alert("success");
+  };
+
   render() {
     if (this.state.loading) {
       return <Loading />;
@@ -92,9 +125,26 @@ class GroupPageBase extends Component {
 
     return (
       <div>
+        <Modal
+          show={this.state.modalShow}
+          onHide={this.handleCloseModal}
+          animation={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>are you sure?</Modal.Title>
+          </Modal.Header>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleCloseModal}>
+              Close
+            </Button>
+            <Button variant="danger" onClick={this.closeGroup}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <div className="text-center">
           <h2>
-            Hello! This is Group <em>{this.state.groupName}</em>
+            Hello! This is Group <em>{this.state.name}</em>
           </h2>
           <div className="text-center">
             <Button

@@ -48,5 +48,7 @@ class Firebase {
   vote = () => this.db.collection('vote');
 
   task = groupId => this.group().doc(groupId).collection('task');
+
+  evaluation = (groupId, memberId) => this.group().doc(groupId).collection('evaluation').doc(memberId);
 }
 export default Firebase;

@@ -58,11 +58,28 @@ const VoteBase = ({ firebase, groupId, groupVotes, authUser, members }) => {
       });
     };
 
+    const closeGroupVote = async (yesVoted, voteRef) => {
+      const groupRef = voteData.target;
+      if (yesVoted === members.length) {
+        await groupRef.update({
+          votes: firebase.app.firestore.FieldValue.arrayRemove(voteRef),
+          status: "closed",
+          closedAt: new Date(),
+          memberEval: false,
+        });
+        setVotes(votes.filter((vote) => vote.id !== voteData.id));
+      }
+    };
+
     const checkIFallMembersRespond = async () => {
       const voteRef = firebase.vote().doc(voteData.id);
       const groupRef = firebase.group().doc(groupId);
       const yesVoted = voteData.yes.length;
       const noVoted = voteData.no.length;
+      if (voteData.type === "close group") {
+        closeGroupVote(yesVoted, voteRef);
+        return;
+      }
       if (yesVoted + noVoted + 1 === members.length) {
         await groupRef.update({
           votes: firebase.app.firestore.FieldValue.arrayRemove(voteRef),
@@ -86,8 +103,8 @@ const VoteBase = ({ firebase, groupId, groupVotes, authUser, members }) => {
                   }
                 }
               });
-            })
-            setVotes(votes.filter(vote => vote.id !== voteData.id));
+            });
+            setVotes(votes.filter((vote) => vote.id !== voteData.id));
           }
         }
       }
@@ -145,7 +162,11 @@ const VoteBase = ({ firebase, groupId, groupVotes, authUser, members }) => {
         <Overlay target={target.current} show={show} placement="right">
           <Tooltip>
             <p>type: {voteData.type}</p>
-            <p>target: {voteData.target.id}</p>
+            {voteData.type !== "close group" ? (
+              <p>target: {voteData.target.id}</p>
+            ) : (
+              <></>
+            )}
             <p>yes: {voteData.yes.length}</p>
             <p>no: {voteData.no.length}</p>
             <Button
