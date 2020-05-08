@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 function Footer() {
     return (
-        <FooterContainer className="main-footer">
+        <FooterContainer className="main-footer" >
             <div className="footer-middle">
                 <div className="container">
                     <div className="row">
@@ -55,18 +55,36 @@ export default Footer;
 
 const FooterContainer = styled.footer`
 
+    .main-footer{
+        position:absolute;
+        left:0;
+        bottom:0;
+        right:0;
+    }
+
     .footer-middle{
-        
+        position:relative;
+        bottom: 0;
+        width: 100%;
+        height: 16rem;            /* Footer height */
         background: #343a40;
         padding-top: 3rem;
         color: #fff;
+        text-align:right;
+        padding-left:8rem;
+        padding-bottom:60px;
+
+
     }
 
     .footer-bottom {
-        padding-top: 3rem;
+        padding-top: 2rem;
         padding-bottom: 2rem;
         position: absolute;
         bottom: 0;
+        height: 2rem;
+        text-align:center;
+
     }
 
     ul li a {
