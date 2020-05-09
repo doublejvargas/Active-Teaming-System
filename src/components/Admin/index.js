@@ -55,7 +55,8 @@ class Admin extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ textAlign: "center", paddingTop: "12rem" }}>
+        <h1>Admin features</h1>
         <Button onClick={this.toggleChange} variant="info" value="registration">
           registration
         </Button>{" "}

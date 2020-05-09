@@ -13,8 +13,6 @@ function Footer() {
                             <ul className="list-unstyled">
                                 <li>helorem</li>
                                 <li>helorem</li>
-                                <li>helorem</li>
-                                <li>helorem</li>
                             </ul>
                         </div>
                         {/* Column 2 */}
@@ -23,16 +21,12 @@ function Footer() {
                             <ul className="list-unstyled">
                                 <li><a href="/">this </a></li>
                                 <li><a href="/">will be</a></li>
-                                <li><a href="/">our </a></li>
-                                <li><a href="/">contact info</a></li>
                             </ul>
                         </div>
                         {/* Column 3 */}
                         <div className="col-md-3 col-sm-6">
                             <h4>Lorem ipsum</h4>
                             <ul className="list-unstyled">
-                                <li><a href="/">helorem</a></li>
-                                <li><a href="/">helorem</a></li>
                                 <li><a href="/">helorem</a></li>
                                 <li><a href="/">helorem</a></li>
                             </ul>
@@ -63,22 +57,20 @@ const FooterContainer = styled.footer`
     }
 
     .footer-middle{
-        position:relative;
+        position:absolute;
         bottom: 0;
         width: 100%;
-        height: 16rem;            /* Footer height */
+        height: 10rem;            /* Footer height */
         background: #343a40;
-        padding-top: 3rem;
+        padding-top: 2rem;
         color: #fff;
         text-align:right;
         padding-left:8rem;
-        padding-bottom:60px;
 
 
     }
 
     .footer-bottom {
-        padding-top: 2rem;
         padding-bottom: 2rem;
         position: absolute;
         bottom: 0;

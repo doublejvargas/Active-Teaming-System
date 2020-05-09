@@ -121,7 +121,8 @@ class AccountPageBase extends Component {
 
   render() {
     return (
-      <div>
+      <div classname="account_contents" style={{ textAlign: "center", paddingTop: "12rem" }}>
+        <h1>Account Features</h1>
         <Button onClick={this.toggleChange} variant="info" value="reference">
           reference
         </Button>{" "}

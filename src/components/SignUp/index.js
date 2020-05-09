@@ -4,7 +4,7 @@ import * as ROUTES from '../../constants/routes';
 import { withFirebase } from '../Firebase';
 import { compose } from 'recompose';
 const SignUpPage = () => (
-    <div>
+    <div style={{ textAlign: "center" ,paddingTop: "6rem"}}>
       <h1>Sign Up</h1>
       <SignUpForm />
     </div>
