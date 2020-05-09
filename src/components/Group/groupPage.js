@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Loading from "../ToolBar/Loading";
 import GroupPost from "./groupPost";
 import { withAuthUser } from "../Session";
@@ -9,6 +9,8 @@ import { Button, Modal, Form } from "react-bootstrap";
 import { Vote } from "./vote";
 import { Task } from "./task";
 import { EvaluateMembers } from "./evaluateMembers";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 class GroupPageBase extends Component {
   constructor(props) {
     super();
@@ -17,8 +19,57 @@ class GroupPageBase extends Component {
       loading: true,
       toggle: "main",
       modalShow: false,
+      newMeeting: false,
     };
   }
+
+  NewMeeting = () => {
+    const [startDate, setStartDate] = useState([new Date()]);
+    const modalToggle = () => {
+      this.setState({ newMeeting: false });
+    };
+    return (
+      <Modal
+        show={this.state.newMeeting}
+        onHide={modalToggle}
+        animation={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>new meeting</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {startDate.map((date, index) => (
+            <DatePicker
+              selected={startDate[index]}
+              onChange={(date) =>
+                setStartDate((prev) => {
+                  prev[index] = date;
+                  return prev;
+                })
+              }
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              timeCaption="time"
+              dateFormat="MMMM d, yyyy h:mm aa"
+            />
+          ))}
+
+          <button onClick={() => setStartDate((prev) => [...prev, new Date()])}>
+            +
+          </button>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={modalToggle}>
+            Close
+          </Button>
+          <Button variant="warning" onClick={modalToggle}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
 
   componentDidMount = async () => {
     let id = this.props.match.params.id;
@@ -50,9 +101,15 @@ class GroupPageBase extends Component {
   MainPage = () => {
     return (
       <>
+        {this.state.newMeeting ? <this.NewMeeting /> : <></>}
         <br />
         <div className="text-center">
-          <Button variant="outline-info">Schedule Meeting</Button>{" "}
+          <Button
+            variant="outline-info"
+            onClick={() => this.setState({ newMeeting: true })}
+          >
+            Schedule Meeting
+          </Button>{" "}
           <Button variant="outline-danger" onClick={this.handleShowModal}>
             Close Group
           </Button>
