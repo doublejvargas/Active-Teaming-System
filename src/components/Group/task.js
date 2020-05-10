@@ -4,6 +4,7 @@ import { Form, Button, Card, Modal } from "react-bootstrap";
 import { withAuthUser } from "../Session";
 import { compose } from "recompose";
 import { ScoreSystem } from "../tabooSystem/score";
+import './groupstyle.css'
 
 const TaskBase = ({ firebase, groupId, authUser, members }) => {
   const [tasks, setTasks] = useState([]);
@@ -80,13 +81,14 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
     };
 
     return (
-      <div
+      <div className="float-left task">
+      {/*<div
         className={
           finished
             ? "d-flex justify-content-end"
             : "d-flex justify-content-start"
         }
-      >
+      >*/}
         <Card style={{ width: "18rem" }}>
           <Card.Body>
             <Card.Title>{task.title}</Card.Title>

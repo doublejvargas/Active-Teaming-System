@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
 import Loading from "../ToolBar/Loading";
 import GroupPost from "./groupPost";
+import app from 'firebase/app';
 import { withAuthUser } from "../Session";
 import { withFirebase } from "../Firebase";
 import { compose } from "recompose";
@@ -9,6 +10,7 @@ import { Button, Modal, Form } from "react-bootstrap";
 import { Vote } from "./vote";
 import { Task } from "./task";
 import { EvaluateMembers } from "./evaluateMembers";
+import MeetingVote from './MeetingVote';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 class GroupPageBase extends Component {
@@ -20,11 +22,13 @@ class GroupPageBase extends Component {
       toggle: "main",
       modalShow: false,
       newMeeting: false,
+      newmeetingtime: new Date(),
+      meetingtimes: [],
+      confirmTime: false
     };
   }
 
   NewMeeting = () => {
-    const [startDate, setStartDate] = useState([new Date()]);
     const modalToggle = () => {
       this.setState({ newMeeting: false });
     };
@@ -38,32 +42,65 @@ class GroupPageBase extends Component {
           <Modal.Title>new meeting</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {startDate.map((date, index) => (
+          {!this.state.confirmTime &&(
+            <div className="text-center">
+              Please select a time:<br/><br/>
             <DatePicker
-              selected={startDate[index]}
-              onChange={(date) =>
-                setStartDate((prev) => {
-                  prev[index] = date;
-                  return prev;
-                })
-              }
+              selected={this.state.newmeetingtime}
+              onChange={(date) =>{
+                this.setState({
+                  newmeetingtime: date
+                });
+              }}
               showTimeSelect
               timeFormat="HH:mm"
               timeIntervals={15}
               timeCaption="time"
               dateFormat="MMMM d, yyyy h:mm aa"
             />
-          ))}
+            </div>
+            )
+            }
+          {!this.state.confirmTime && (
+            <div className="text-center">
+            <button onClick={() => {
+              alert('Booked!');
 
-          <button onClick={() => setStartDate((prev) => [...prev, new Date()])}>
-            +
-          </button>
+              const timearray = this.state.meetingtimes;
+              timearray.push(new Date(this.state.newmeetingtime))
+
+              this.setState({
+                newmeetingtime: new Date(),
+                meetingtimes: timearray,
+                confirmTime: !this.state.confirmTime
+              })
+              }}>
+              Book time!
+            </button>
+            </div>
+          )
+          }
+          {this.state.confirmTime && (
+            <div className="text-center">
+              You have already book the following time slots:<br/>
+              {this.state.meetingtimes.toString()}
+              <br/><br/>
+            <button onClick={() => {
+
+              this.setState({
+                confirmTime: !this.state.confirmTime
+              })
+              }}>
+              Add more
+            </button>
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={modalToggle}>
             Close
           </Button>
-          <Button variant="warning" onClick={modalToggle}>
+          <Button variant="warning" onClick={this.SubmitMeetingTime}>
             Confirm
           </Button>
         </Modal.Footer>
@@ -97,6 +134,36 @@ class GroupPageBase extends Component {
       })
       .catch((error) => console.log(error));
   };
+
+
+  SubmitMeetingTime = async() => {
+    let groupid = this.props.match.params.id;
+
+    const array = this.state.meetingtimes;
+
+    const res = array.reduce((a,b)=> (a[b]=1,a),{});
+
+    const voter = [];
+
+    for( let i = 0; i < this.state.members.length; i++ ){
+      if( this.state.members[i].email === this.props.authUser.email)
+        continue;
+        
+      voter.push(this.state.members[i].email)
+    }
+
+    let MeetingRef = await app.firestore().collection('Meeting')
+      .add({
+        GroupRef: groupid,
+        Promoter: this.props.authUser.name,
+        leftVoter: voter,
+        TimeOptions: res,
+        status: 'Open'
+      })
+    
+    this.setState({ newMeeting: false });
+  }
+
 
   MainPage = () => {
     return (
@@ -147,6 +214,10 @@ class GroupPageBase extends Component {
       );
     } else if (this.state.toggle === "tasks") {
       return <Task groupId={this.state.groupId} members={this.state.members} />;
+    }
+    else if (this.state.toggle === "meetings") {
+      return <MeetingVote groupId={this.state.groupId} members={this.state.members} 
+                          authdata={this.props.authUser.email}/>;
     }
   };
 
@@ -221,6 +292,12 @@ class GroupPageBase extends Component {
               onClick={() => this.setState({ toggle: "tasks" })}
             >
               check tasks
+            </Button>{" "}
+            <Button
+              variant="info"
+              onClick={() => this.setState({ toggle: "meetings" })}
+            >
+              Upcoming Meeting
             </Button>
           </div>
           <h4>Group Members:</h4>

@@ -104,9 +104,9 @@ const VoteBase = ({ firebase, groupId, groupVotes, authUser, members }) => {
                 }
               });
             });
-            setVotes(votes.filter((vote) => vote.id !== voteData.id));
           }
         }
+        setVotes(votes.filter((vote) => vote.id !== voteData.id));
       }
     };
 
