@@ -31,8 +31,10 @@ class Firebase {
   user = (userEmail) => this.db.doc(`users/${userEmail}`);
 
   getTopRankedUsers = () =>
-    this.db.collection("users").orderBy("score").limit(3);
+    this.db.collection("users").orderBy("score", "desc").limit(3);
 
+  getAllVIPs = () => this.db.collection("users").where("role", "==", "VIP");
+  
   pendingUser = (userEmail) => this.db.doc(`pendingUsers/${userEmail}`);
 
   getPendingUsers = () =>
@@ -43,10 +45,13 @@ class Firebase {
   group = () => this.db.collection("groups");
 
   getTopRankedGroups = () =>
+    this.db.collection("groups").orderBy("evaluationScore").limit(3);
+
+  getGroupsNeedEvaluate = () =>
     this.db
       .collection("groups")
-      .orderBy("evaluationScore")
-      .limit(3);
+      .where("status", "==", "closed")
+      .where("vipEvaluated", "==", false);
 
   complaint = () => this.db.collection("complaint");
 

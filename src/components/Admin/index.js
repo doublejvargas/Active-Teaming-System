@@ -4,6 +4,7 @@ import { UserDetail } from "../User/userDetail";
 import { Button } from "react-bootstrap";
 import { ComplaintsList } from "./complaints";
 import { ComplimentList } from "./compliments";
+import { Evaluation } from "./evaluation";
 class Admin extends Component {
   constructor(props) {
     super(props);
@@ -51,11 +52,13 @@ class Admin extends Component {
       return <ComplaintsList firebase={this.props.firebase} />;
     else if (toggle === "compliments")
       return <ComplimentList firebase={this.props.firebase} />;
+    else if (toggle === "evaluation")
+      return <Evaluation firebase={this.props.firebase} />;
   };
 
   render() {
     return (
-      <div style={{ textAlign: "center", paddingTop: "12rem" }}>
+      <div style={{ textAlign: "center"}}>
         <h1>Admin features</h1>
         <Button onClick={this.toggleChange} variant="info" value="registration">
           registration
@@ -65,6 +68,9 @@ class Admin extends Component {
         </Button>{" "}
         <Button onClick={this.toggleChange} variant="info" value="compliments">
           compliments
+        </Button>{" "}
+        <Button onClick={this.toggleChange} variant="info" value="evaluation">
+          closed groups
         </Button>{" "}
         <this.ConditionalRender />
       </div>
