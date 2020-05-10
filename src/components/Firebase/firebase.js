@@ -1,14 +1,14 @@
-import app from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
-import 'firebase/functions';
+import app from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/functions";
 const config = {
-    apiKey: "AIzaSyB8YOdZddRMB-rm9p8A6COaolDDTP3oEAo",
-    authDomain: "csc322e.firebaseapp.com",
-    databaseURL: "https://csc322e.firebaseio.com",
-    projectId: "csc322e",
-    storageBucket: "csc322e.appspot.com",
-    messagingSenderId: "451549833356",
+  apiKey: "AIzaSyB8YOdZddRMB-rm9p8A6COaolDDTP3oEAo",
+  authDomain: "csc322e.firebaseapp.com",
+  databaseURL: "https://csc322e.firebaseio.com",
+  projectId: "csc322e",
+  storageBucket: "csc322e.appspot.com",
+  messagingSenderId: "451549833356",
 };
 class Firebase {
   constructor() {
@@ -19,36 +19,50 @@ class Firebase {
   }
 
   createUserWithEmailAndPassword = (email, password) =>
-  this.auth.createUserWithEmailAndPassword(email, password);
+    this.auth.createUserWithEmailAndPassword(email, password);
 
   signInWithEmailAndPassword = (email, password) =>
-  this.auth.signInWithEmailAndPassword(email, password);
+    this.auth.signInWithEmailAndPassword(email, password);
 
   signOut = () => this.auth.signOut();
 
-  passwordReset = email => this.auth.sendPasswordResetEmail(email);
+  passwordReset = (email) => this.auth.sendPasswordResetEmail(email);
 
-  user = userEmail => this.db.doc(`users/${userEmail}`);
+  user = (userEmail) => this.db.doc(`users/${userEmail}`);
 
-  pendingUser = userEmail => this.db.doc(`pendingUsers/${userEmail}`);
+  getTopRankedUsers = () =>
+    this.db.collection("users").orderBy("score").limit(3);
 
-  getPendingUsers = () => this.db.collection('pendingUsers')
-                          .where("rejected","in",["init", "appeal"]);
+  pendingUser = (userEmail) => this.db.doc(`pendingUsers/${userEmail}`);
 
-  group = () => this.db.collection('groups');
+  getPendingUsers = () =>
+    this.db
+      .collection("pendingUsers")
+      .where("rejected", "in", ["init", "appeal"]);
 
-  complaint = () => this.db.collection('complaint');
+  group = () => this.db.collection("groups");
 
-  getUnsovledComplaint = () => this.db.collection('complaint').where("solved", "==", false);
+  getTopRankedGroups = () =>
+    this.db
+      .collection("groups")
+      .orderBy("evaluationScore")
+      .limit(3);
 
-  compliment = () => this.db.collection('compliment');
+  complaint = () => this.db.collection("complaint");
 
-  getUnsovledCompliment = () => this.db.collection('compliment').where("solved", "==", false);
+  getUnsovledComplaint = () =>
+    this.db.collection("complaint").where("solved", "==", false);
 
-  vote = () => this.db.collection('vote');
+  compliment = () => this.db.collection("compliment");
 
-  task = groupId => this.group().doc(groupId).collection('task');
+  getUnsovledCompliment = () =>
+    this.db.collection("compliment").where("solved", "==", false);
 
-  evaluation = (groupId, memberId) => this.group().doc(groupId).collection('evaluation').doc(memberId);
+  vote = () => this.db.collection("vote");
+
+  task = (groupId) => this.group().doc(groupId).collection("task");
+
+  evaluation = (groupId, memberId) =>
+    this.group().doc(groupId).collection("evaluation").doc(memberId);
 }
 export default Firebase;
