@@ -4,7 +4,7 @@ import { Form, Button, Card, Modal } from "react-bootstrap";
 import { withAuthUser } from "../Session";
 import { compose } from "recompose";
 import { ScoreSystem } from "../tabooSystem/score";
-import './groupstyle.css'
+import "./groupstyle.css";
 
 const TaskBase = ({ firebase, groupId, authUser, members }) => {
   const [tasks, setTasks] = useState([]);
@@ -76,19 +76,14 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
 
     const assignTo = (event) => {
       const name = event.target.value;
-      firebase.task(groupId).doc(task.id).update({ assignTo: name });
-      setAssign(name);
+      if (name !== "assign to...") {
+        firebase.task(groupId).doc(task.id).update({ assignTo: name });
+        setAssign(name);
+      }
     };
 
     return (
       <div className="float-left task">
-      {/*<div
-        className={
-          finished
-            ? "d-flex justify-content-end"
-            : "d-flex justify-content-start"
-        }
-      >*/}
         <Card style={{ width: "18rem" }}>
           <Card.Body>
             <Card.Title>{task.title}</Card.Title>
@@ -97,7 +92,10 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
           {finished ? (
             <>
               <h6>Finished by {task.assignTo}</h6>
-              <h6>Finished at {new Date(task.finishedAt.seconds * 1000).toUTCString()}</h6>
+              <h6>
+                Finished at{" "}
+                {new Date(task.finishedAt.seconds * 1000).toUTCString()}
+              </h6>
             </>
           ) : (
             <>

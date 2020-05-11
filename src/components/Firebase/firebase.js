@@ -35,6 +35,8 @@ class Firebase {
 
   getAllVIPs = () => this.db.collection("users").where("role", "==", "VIP");
   
+  getDemocraticSU = () => this.db.collection('users').where('role', '==', 'DSU');
+  
   pendingUser = (userEmail) => this.db.doc(`pendingUsers/${userEmail}`);
 
   getPendingUsers = () =>
@@ -64,6 +66,8 @@ class Firebase {
     this.db.collection("compliment").where("solved", "==", false);
 
   vote = () => this.db.collection("vote");
+
+  getSUvote = () => this.db.collection('vote').where('type','==','SU').where('achieved','==',false);
 
   task = (groupId) => this.group().doc(groupId).collection("task");
 
