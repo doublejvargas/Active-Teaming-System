@@ -7,7 +7,7 @@ import { Group } from "./Group";
 import { WhiteList } from "./WhiteList";
 import { BlackList } from "./BlackList";
 import { Invitation } from "./invitation";
-
+import { Evaluation } from './evaluation';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 
@@ -117,6 +117,7 @@ class AccountPageBase extends Component {
     else if (toggle === "group")
       return <Group currentUserEmail={this.state.email} currentUserGroups={this.state.groups} firebase={this.props.firebase} />;
     else if (toggle === 'invitation') return <Invitation />
+    else if (toggle === 'evaluation') return <Evaluation authUser={this.props.authUser} />
   };
 
   render() {
@@ -137,6 +138,9 @@ class AccountPageBase extends Component {
         </Button>{" "}
         <Button onClick={this.toggleChange} variant="info" value="invitation">
           invitation
+        </Button>{" "}
+        <Button onClick={this.toggleChange} variant="info" value="evaluation">
+          evaluation
         </Button>
         <this.ConditionalRender />
       </div>

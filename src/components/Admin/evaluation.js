@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { withFirebase } from "../Firebase";
-
-const EvluationBase = ({ firebase }) => {
+import { withAuthUser } from "../Session";
+import { compose } from "recompose";
+const EvluationBase = ({ firebase, authUser}) => {
   const [vips, setVips] = useState([]);
   const [groups, setGroups] = useState([]);
   useEffect(() => {
@@ -54,12 +55,12 @@ const EvluationBase = ({ firebase }) => {
           <Card.Text>Project description: {groupData.public}</Card.Text>
         </Card.Body>
         {vips.map((vip) => (
-          <>
+          <>{groupData.members.some((ref) => ref.id === vip.email)?<></>:
             <strong>
               vip name: {vip.name}, score: {vip.score}
               <button onClick={() => assignTo(vip.id)}>assign to him</button>
-            </strong>
-          </>
+            </strong>}</>
+          
         ))}
       </Card>
     );
@@ -79,4 +80,4 @@ const EvluationBase = ({ firebase }) => {
   );
 };
 
-export const Evaluation = withFirebase(EvluationBase);
+export const Evaluation = compose(withAuthUser,withFirebase)(EvluationBase);
