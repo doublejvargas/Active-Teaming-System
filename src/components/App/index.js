@@ -5,24 +5,62 @@ import * as ROUTES from '../../constants/routes';
 import LandingPage from '../Landing';
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
-import PasswordForgetPage from '../PasswordForget';
+import PasswordChangePage from '../PasswordChange';
 import HomePage from '../Home';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
 import StatusPage from '../RegisterStatus';
-import { withAuthentication } from '../Session';
+import { withAuthentication, withAuthUser } from '../Session';
 import ToolBar from '../ToolBar/ToolBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../layouts/Navbar';
 import Footer from '../layouts/Footer';
-import { Switch } from 'react-router-dom';
+import { Switch, Redirect} from 'react-router-dom';
 
 // import pages
 import Home from '../Home/';
 import GroupPage from '../Group/groupPage'
 
-
-
+const LoginRouteBase = ({ component: Comp, authUser, path, ...rest }) => {
+  return (
+    <Route
+      path={path}
+      {...rest}
+      render={props => {
+        return authUser ? (
+          <Comp {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/",
+            }}
+          />
+        );
+      }}
+    />
+  );
+};
+const LoginRoute = withAuthUser(LoginRouteBase)
+const AdminRouteBase = ({ component: Comp, authUser, path, ...rest }) => {
+  return (
+    <Route
+      path={path}
+      {...rest}
+      render={props => {
+        return authUser && (authUser.role==='SU' || authUser.role==='DSU') ? (
+          <Comp {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/",
+            }}
+          />
+        );
+      }}
+    />
+  );
+};
+const AdminRoute = withAuthUser(AdminRouteBase)
 class App extends Component {
   render() {
     return (
@@ -33,11 +71,11 @@ class App extends Component {
           <Route path="/signin" component={SignInPage} />
           <Route path="/signup" component={SignUpPage} />
           <Route path="/status" component={StatusPage} />
-          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-          <Route path={"/account"} component={AccountPage} />
-          <Route path={"/admin"} component={AdminPage} />
+          <Route path='/passwordChange' component={PasswordChangePage} />
+          <LoginRoute path={"/account"} component={AccountPage} />
+          <AdminRoute path={"/admin"} component={AdminPage} />
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
-          <Route path="/group/:id" component={GroupPage} />
+          <LoginRoute path="/group/:id" component={GroupPage} />
         </Switch>
         <Footer />
       </div>

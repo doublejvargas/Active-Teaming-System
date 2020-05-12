@@ -73,5 +73,7 @@ class Firebase {
 
   evaluation = (groupId, memberId) =>
     this.group().doc(groupId).collection("evaluation").doc(memberId);
+
+    passwordChange = (password) => this.auth.currentUser.updatePassword(password);
 }
 export default Firebase;

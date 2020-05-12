@@ -11,7 +11,6 @@ const SignInPage = () => (
     <SignInForm />
     <SignUpLink />
     <PasswordForgetLink />
-
   </div>
 );
 const INITIAL_STATE = {
@@ -35,7 +34,7 @@ class SignInFormBase extends Component {
           .get()
           .then((res) => {
             const data = res.data();
-            if (data.blocked && data.blocked !== 'false') {
+            if (data.blocked && data.blocked !== "false") {
               if (data.blocked === "blocked") {
                 this.props.firebase.signOut();
                 this.setState({ error: { message: "user been blocked!!!" } });
@@ -44,7 +43,11 @@ class SignInFormBase extends Component {
                 this.props.firebase.user(email).update({ blocked: "blocked" });
               }
             } else {
-              this.props.history.push(ROUTES.ACCOUNT);
+              if (password === "123456") {
+                this.props.history.push("/passwordChange");
+              } else {
+                this.props.history.push(ROUTES.ACCOUNT);
+              }
             }
           });
         this.setState({ ...INITIAL_STATE });
@@ -70,14 +73,16 @@ class SignInFormBase extends Component {
           onChange={this.onChange}
           type="text"
           placeholder="Email Address"
-        /><br />
+        />
+        <br />
         <input
           name="password"
           value={password}
           onChange={this.onChange}
           type="password"
           placeholder="Password"
-        /><br />
+        />
+        <br />
         <button disabled={isInvalid} type="submit">
           Sign In
         </button>

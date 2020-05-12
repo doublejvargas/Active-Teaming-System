@@ -7,10 +7,10 @@ import { Group } from "./Group";
 import { WhiteList } from "./WhiteList";
 import { BlackList } from "./BlackList";
 import { Invitation } from "./invitation";
-import { Evaluation } from './evaluation';
-import { VoteSU } from './voteSU';
-import { PasswordForgetForm } from '../PasswordForget';
-import PasswordChangeForm from '../PasswordChange';
+import { Evaluation } from "./evaluation";
+import { VoteSU } from "./voteSU";
+import { PasswordForgetForm } from "../PasswordForget";
+import PasswordChangeForm from "../PasswordChange";
 
 class AccountPageBase extends Component {
   constructor(props) {
@@ -116,15 +116,22 @@ class AccountPageBase extends Component {
         />
       );
     else if (toggle === "group")
-      return <Group currentUserEmail={this.state.email} currentUserGroups={this.state.groups} firebase={this.props.firebase} />;
-    else if (toggle === 'invitation') return <Invitation />
-    else if (toggle === 'evaluation') return <Evaluation authUser={this.props.authUser} />
-    else if (toggle === 'voteSU') return <VoteSU />
+      return (
+        <Group
+          currentUserEmail={this.state.email}
+          currentUserGroups={this.state.groups}
+          firebase={this.props.firebase}
+        />
+      );
+    else if (toggle === "invitation") return <Invitation />;
+    else if (toggle === "evaluation")
+      return <Evaluation authUser={this.props.authUser} />;
+    else if (toggle === "voteSU") return <VoteSU />;
   };
 
   render() {
     return (
-      <div classname="account_contents" style={{ textAlign: "center"}}>
+      <div classname="account_contents" style={{ textAlign: "center" }}>
         <h1>Account Features</h1>
         <Button onClick={this.toggleChange} variant="info" value="reference">
           reference
@@ -141,19 +148,27 @@ class AccountPageBase extends Component {
         <Button onClick={this.toggleChange} variant="info" value="invitation">
           invitation
         </Button>{" "}
-        <Button onClick={this.toggleChange} variant="info" value="evaluation">
-          evaluation
-        </Button>{" "}
-        <Button onClick={this.toggleChange} variant="info" value="voteSU">
-          vote a SU
-        </Button>
+        {this.state.role && this.state.role === "VIP" ? (
+          <>
+            <Button
+              onClick={this.toggleChange}
+              variant="info"
+              value="evaluation"
+            >
+              evaluation
+            </Button>{" "}
+            <Button onClick={this.toggleChange} variant="info" value="voteSU">
+              vote a SU
+            </Button>
+          </>
+        ) : (
+          <></>
+        )}
         <this.ConditionalRender />
       </div>
     );
   }
 }
 const AccountPage = compose(withAuthUser, withFirebase)(AccountPageBase);
-
-
 
 export default AccountPage;

@@ -2,7 +2,7 @@ import React from "react";
 import { AuthUserContext } from "../Session";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
-import SignOut from '../SignOut';
+import SignOut from "../SignOut";
 {
   /* when we have logo as svg file,
     do import logo from '../logo.svg';  */
@@ -32,7 +32,11 @@ const Navbar = () => (
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <AuthUserContext.Consumer>
           {(authUser) =>
-            authUser ? <NavigationAuth /> : <NavigationNonAuth />
+            authUser ? (
+              <NavigationAuth authUser={authUser} />
+            ) : (
+              <NavigationNonAuth />
+            )
           }
         </AuthUserContext.Consumer>
       </div>
@@ -76,29 +80,11 @@ function NavigationNonAuth() {
           Registration Status
         </Link>
       </li>
-      <li className="nav-item active">
-        <Link
-          className="nav-link text-white text-uppercase ml-5"
-          to={ROUTES.ACCOUNT}
-        >
-          ACCOUNT
-          <span class="sr-only">(current)</span>
-        </Link>
-      </li>
-      <li className="nav-item active">
-        <Link
-          className="nav-link text-white text-uppercase ml-5"
-          to={ROUTES.ADMIN}
-        >
-          ADMIN
-          <span class="sr-only">(current)</span>
-        </Link>
-      </li>
     </ul>
   );
 }
 
-function NavigationAuth() {
+function NavigationAuth({ authUser }) {
   return (
     <ul className="navbar-nav m-auto">
       <li className="nav-item active">
@@ -119,14 +105,18 @@ function NavigationAuth() {
           Account
         </Link>
       </li>
-      <li className="nav-item">
-        <Link
-          className="nav-link text-white text-uppercase ml-5"
-          to={ROUTES.ADMIN}
-        >
-          Admin
-        </Link>
-      </li>
+      {authUser.role === "SU" || authUser.role === "DSU" ? (
+        <li className="nav-item">
+          <Link
+            className="nav-link text-white text-uppercase ml-5"
+            to={ROUTES.ADMIN}
+          >
+            Admin
+          </Link>
+        </li>
+      ) : (
+        <></>
+      )}
       <SignOut />
     </ul>
   );
