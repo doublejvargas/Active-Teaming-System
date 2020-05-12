@@ -31,6 +31,8 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
 
   const ShowTasks = () => {
     if (tasks && tasks.length > 0) {
+      tasks.sort((a,b) => a.finished - b.finished)
+      console.log(tasks)
       return tasks.map((task) => (
         <TaskDetail
           task={task}
@@ -83,7 +85,7 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
     };
 
     return (
-      <Card className='h-100'>
+      <Card border="primary" className='h-100' style={{width: '25rem'}}>
         <Card.Body>
           <Card.Title>{task.title}</Card.Title>
           <Card.Text>{task.description}</Card.Text>
