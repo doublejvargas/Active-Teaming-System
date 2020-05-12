@@ -6,7 +6,7 @@ import { withAuthUser } from "../Session";
 import { withFirebase } from "../Firebase";
 import { compose } from "recompose";
 import { UserDetail } from "../User/userDetail";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { Vote } from "./vote";
 import { Task } from "./task";
 import { EvaluateMembers } from "./evaluateMembers";

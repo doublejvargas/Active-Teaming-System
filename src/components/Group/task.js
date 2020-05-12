@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withFirebase } from "../Firebase";
-import { Form, Button, Card, Modal } from "react-bootstrap";
+import { Form, Button, Card, Modal, CardColumns } from "react-bootstrap";
 import { withAuthUser } from "../Session";
 import { compose } from "recompose";
 import { ScoreSystem } from "../tabooSystem/score";
@@ -83,35 +83,33 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
     };
 
     return (
-      <div className="float-left task">
-        <Card style={{ width: "18rem" }}>
-          <Card.Body>
-            <Card.Title>{task.title}</Card.Title>
-            <Card.Text>{task.description}</Card.Text>
-          </Card.Body>
-          {finished ? (
-            <>
-              <h6>Finished by {task.assignTo}</h6>
-              <h6>
-                Finished at{" "}
-                {new Date(task.finishedAt.seconds * 1000).toUTCString()}
-              </h6>
-            </>
-          ) : (
-            <>
-              <Form.Control as="select" value={assign} onChange={assignTo}>
-                <option>assign to...</option>
-                {members.map((member) => (
-                  <option>{member.name}</option>
-                ))}
-              </Form.Control>
-              <Button variant="warning" onClick={markAsFinished}>
-                mark as finished
-              </Button>
-            </>
-          )}
-        </Card>
-      </div>
+      <Card className='h-100'>
+        <Card.Body>
+          <Card.Title>{task.title}</Card.Title>
+          <Card.Text>{task.description}</Card.Text>
+        </Card.Body>
+        {finished ? (
+          <>
+            <h6>Finished by {task.assignTo}</h6>
+            <h6>
+              Finished at{" "}
+              {new Date(task.finishedAt.seconds * 1000).toUTCString()}
+            </h6>
+          </>
+        ) : (
+          <>
+            <Form.Control as="select" value={assign} onChange={assignTo}>
+              <option>assign to...</option>
+              {members.map((member) => (
+                <option>{member.name}</option>
+              ))}
+            </Form.Control>
+            <Button variant="warning" onClick={markAsFinished}>
+              mark as finished
+            </Button>
+          </>
+        )}
+      </Card>
     );
   };
 
@@ -149,8 +147,9 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
           </Modal.Footer>
         </Modal>
       </div>
-
-      <ShowTasks />
+      <CardColumns>
+        <ShowTasks />
+      </CardColumns>
     </>
   );
 };

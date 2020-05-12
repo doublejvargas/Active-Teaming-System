@@ -57,7 +57,7 @@ const FooterContainer = styled.footer`
     }
 
     .footer-middle{
-        position:absolute;
+        position:relative;
         bottom: 0;
         width: 100%;
         height: 10rem;            /* Footer height */
