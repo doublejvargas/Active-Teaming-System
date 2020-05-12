@@ -65,7 +65,7 @@ const VoteBase = ({ firebase, groupId, groupVotes, authUser, members }) => {
           votes: firebase.app.firestore.FieldValue.arrayRemove(voteRef),
           status: "closed",
           closedAt: new Date(),
-          memberEval: false,
+          vipEvaluated: false,
         });
         setVotes(votes.filter((vote) => vote.id !== voteData.id));
       }

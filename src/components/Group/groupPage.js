@@ -194,7 +194,7 @@ class GroupPageBase extends Component {
 
   ConditionalRender = () => {
     if (this.state.toggle === "main") {
-      if (this.state.status && !this.state.memberEval) {
+      if (this.state.status && this.state.status === 'closed') {
         return (
           <EvaluateMembers
             groupId={this.state.groupId}
@@ -317,6 +317,12 @@ class GroupPageBase extends Component {
           <h2>
             Hello! This is Group <em>{this.state.name}</em>
           </h2>
+          <h4>
+            Project description: <em>{this.state.public}</em>
+          </h4>
+          <h4>
+            Private information: <em>{this.state.private}</em>
+          </h4>
           <div className="text-center">
             <Button
               variant="info"

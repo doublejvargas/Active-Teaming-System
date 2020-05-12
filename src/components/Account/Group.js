@@ -110,7 +110,7 @@ export const Group = ({ currentUserEmail, currentUserGroups, firebase }) => {
               onChange={handleFormChange}
               as="textarea"
               name="public"
-              placeholder="public infomation"
+              placeholder="project description"
             />
             <Form.Control
               onChange={handleFormChange}
