@@ -34,11 +34,7 @@ function Footer() {
                         </div>
                     </div>
                     {/* Footer Bottom */}
-                    <div className="footer-bottom">
-                        <p className="text-xs-center">
-                            &copy;{new Date().getFullYear()} Teaming System by Team E - All Rights Reserved
-                 </p>
-                    </div>
+
                 </div>
             </div>
         </FooterContainer >
@@ -61,7 +57,7 @@ const FooterContainer = styled.footer`
         position:absolute;
         bottom: 0;
         width: 100%;
-        height: 10rem;            /* Footer height */
+        height: 8em;            /* Footer height */
         background: #343a40;
         padding-top: 2rem;
         color: #fff;
