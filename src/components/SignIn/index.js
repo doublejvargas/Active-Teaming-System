@@ -4,13 +4,11 @@ import { compose } from "recompose";
 import { SignUpLink } from "../SignUp";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
-import { PasswordForgetLink } from "../PasswordForget";
 const SignInPage = () => (
   <div style={{ textAlign: "center", paddingTop: "6rem" }}>
     <h1>SignIn</h1>
     <SignInForm />
     <SignUpLink />
-    <PasswordForgetLink />
   </div>
 );
 const INITIAL_STATE = {
