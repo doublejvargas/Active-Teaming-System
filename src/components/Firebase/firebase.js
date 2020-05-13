@@ -34,9 +34,10 @@ class Firebase {
     this.db.collection("users").orderBy("score", "desc").limit(3);
 
   getAllVIPs = () => this.db.collection("users").where("role", "==", "VIP");
-  
-  getDemocraticSU = () => this.db.collection('users').where('role', '==', 'DSU');
-  
+
+  getDemocraticSU = () =>
+    this.db.collection("users").where("role", "==", "DSU");
+
   pendingUser = (userEmail) => this.db.doc(`pendingUsers/${userEmail}`);
 
   getPendingUsers = () =>
@@ -47,7 +48,7 @@ class Firebase {
   group = () => this.db.collection("groups");
 
   getTopRankedGroups = () =>
-    this.db.collection("groups").orderBy("evaluationScore").limit(3);
+    this.db.collection("groups").orderBy("evaluationScore", "desc").limit(3);
 
   getGroupsNeedEvaluate = () =>
     this.db
@@ -67,13 +68,17 @@ class Firebase {
 
   vote = () => this.db.collection("vote");
 
-  getSUvote = () => this.db.collection('vote').where('type','==','SU').where('achieved','==',false);
+  getSUvote = () =>
+    this.db
+      .collection("vote")
+      .where("type", "==", "SU")
+      .where("achieved", "==", false);
 
   task = (groupId) => this.group().doc(groupId).collection("task");
 
   evaluation = (groupId, memberId) =>
     this.group().doc(groupId).collection("evaluation").doc(memberId);
 
-    passwordChange = (password) => this.auth.currentUser.updatePassword(password);
+  passwordChange = (password) => this.auth.currentUser.updatePassword(password);
 }
 export default Firebase;
