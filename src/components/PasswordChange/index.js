@@ -23,7 +23,8 @@ class PasswordChangeForm extends Component {
       .passwordChange(passwordOne)
       .then(() => {
         alert('success')
-        this.props.history.push('/account');
+        this.props.firebase.signOut();
+        this.props.history.push('/signin');
         this.setState({ ...INITIAL_STATE });
       })
       .catch(error => {
