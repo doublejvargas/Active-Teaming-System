@@ -12,8 +12,8 @@ import SignOut from "../SignOut";
 const Navbar = () => (
   <div>
     <nav className="navbar navbar-expand-lg navbar-light bg-dark">
-      <a className="navbar-brand" href="#">
-        Teaming System(Logo)
+      <a className="navbar-brand" href="#" style={{ color: "#fff" }}>
+        Teaming System
       </a>
       <button
         className="navbar-toggler"
@@ -35,8 +35,8 @@ const Navbar = () => (
             authUser ? (
               <NavigationAuth authUser={authUser} />
             ) : (
-              <NavigationNonAuth />
-            )
+                <NavigationNonAuth />
+              )
           }
         </AuthUserContext.Consumer>
       </div>
@@ -115,8 +115,8 @@ function NavigationAuth({ authUser }) {
           </Link>
         </li>
       ) : (
-        <></>
-      )}
+          <></>
+        )}
       <SignOut />
     </ul>
   );
