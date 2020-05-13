@@ -43,7 +43,7 @@ const TaskBase = ({ firebase, groupId, authUser, members }) => {
         />
       ));
     }
-    return <div>no tasks</div>;
+    return <h1>no tasks</h1>;
   };
   const AddNewTask = () => {
     firebase

@@ -9,13 +9,15 @@ const VoteBase = ({ firebase, groupId, groupVotes, authUser, members }) => {
 
   const getVotes = async () => {
     let voteList = [];
-    for (let i = 0; i < groupVotes.length; ++i) {
-      await groupVotes[i].get().then((res) => {
-        voteList.push({ ...res.data(), id: res.id });
-      });
+    if (groupVotes) {
+      for (let i = 0; i < groupVotes.length; ++i) {
+        await groupVotes[i].get().then((res) => {
+          voteList.push({ ...res.data(), id: res.id });
+        });
+      }
+      voteList = voteList.filter((vote) => vote.target.id !== authUser.email);
+      setVotes(voteList);
     }
-    voteList = voteList.filter((vote) => vote.target.id !== authUser.email);
-    setVotes(voteList);
   };
   useEffect(() => {
     getVotes();
