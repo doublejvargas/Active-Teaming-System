@@ -17,8 +17,9 @@ const ComplaintModalBase = ({
   const handleShow = () => setShowModal(!showModal);
 
   const handleConfirm = () => {
-    let ref = firebase.group().doc(data.id);
-    if (type === "user") ref = firebase.user(data.id);
+    let ref = null;
+    if (type === 'group') ref = firebase.group().doc(data.id);
+    if (type === "user") ref = firebase.user(data.email);
     let newReason = reason;
     const tabooSaid = [];
     tabooWords.forEach((word) => {
