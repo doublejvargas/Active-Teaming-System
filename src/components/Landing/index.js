@@ -69,9 +69,12 @@ const LandingBase = ({ firebase }) => {
             <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="500" xmlns="http://www.w3.org/2000/svg" aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice" role="img"><title>Placeholder</title><rect width="100%" height="100%" fill="#666" /><text x="50%" y="50%" fill="#444" dy=".3em"></text></svg>
 
             <div class="carousel-caption d-none d-md-block">
-              <h5 style={{ color: 'black', fontWeight: 'bold' }}>TOP 3 Projects</h5>
-              {groups.map(groups => (
-                <p>{groups.name}</p>))}
+              <h5 style={{ color: 'black', fontWeight: 'bold' }}>TOP 3 Groups</h5>
+              {groups.map((group) => (
+                <p> Name:{group.name}<br></br>
+                    Description:{group.public}
+                </p>
+              ))}
             </div>
           </div>
         </div>
