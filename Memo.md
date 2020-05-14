@@ -11,9 +11,7 @@
 
 -	We have a landing page that displays data for top 3 user and project by pulling data from firebase for visitor 
 
--	Visitor can sign up to become a OU by filling personal info, it will need to be either approved or rejected by SU’s side in our system. After visitor gets approved, visitor will receive email with a link to change their password and all set to enjoy the system. 
-
--	If SU rejects the application once, visitor can send him appeal in the registration check section on the NavBar, and then it will be re-checked by SU. If SU declines the appeal again, the visitor will be put in blacklist. 
+-	Visitor can sign up to become a OU by filling personal info, it will need to be either approved or rejected by SU’s side in our system. After visitor gets approved, visitor will receive email with a link to change their password and all set to enjoy the system. If SU rejects the application once, visitor can send him appeal in the registration check section on the NavBar, and then it will be re-checked by SU. If SU declines the appeal again, the visitor will be put in blacklist. 
 
 -	OU can form a group in the account section in our system, and at the same time s/he can invite other user by putting their emails. If it exists, invitation will be delivered to that user. Also, user can set other user into blacklist, and whitelist in our system. If OU puts some other user into blacklist, this OU will never see the invitation from that user. On the other hand, if OU puts some other user into whitelist, this OU will automatically accept and be in the group when he’s invited from that User. 
 
@@ -26,8 +24,7 @@
 
 - Group members can close the group by voting and VIP can evaluate group and determine a reputation score for every group member. 
 
-- if OU gets score hire than 30, it will be promoted to VIP by database,
-- and if VIP has a score less than 25, it will be demoted to OU by database.
+- if OU gets score hire than 30, it will be promoted to VIP by database, and if VIP has a score less than 25, it will be demoted to OU by database.
 
 
 
