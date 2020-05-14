@@ -24,4 +24,9 @@
 
 -	Inside the group page, members can issue a warning or a praise to a group member and vote will be either yes or no without having voters’ names. We also have kick-out feature for group members to kick someone out from the group. And if any user gets score under 0, this user will be kicked out from the entire system automatically. 
 
-- 
+- Group members can close the group by voting and VIP can evaluate group and determine a reputation score for every group member. 
+
+- if OU gets score hire than 30, it will be promoted to VIP by database,
+- and if VIP has a score less than 25, it will be demoted to OU by database.
+
+
