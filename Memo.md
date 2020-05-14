@@ -1,6 +1,4 @@
-- Visitors can view top 3 ranked users and groups based on their score
-
-- Visitors can register to our system by filling in some basic infomation, and if the visitor know someone in our system, they can put in his/her email as the referal to get an initial score. The Admin of our system can accept/reject the registered visitors. Visitors can choose to appeal if they got rejected.
+# Type of users:
 
 -	If you don’t sign in and land in the website, you are considered as a visitor.
 
@@ -8,6 +6,8 @@
 
 -	SuperUser in our system has a credential of ID:test@test.com with PW:654321
 -	And we have DSU that has a credential of ID:hlee011@citymail.cuny.edu with PW:654321
+
+# System features:
 
 -	We have a landing page that displays data for top 3 user and project by pulling data from firebase for visitor 
 
@@ -30,3 +30,11 @@
 - and if VIP has a score less than 25, it will be demoted to OU by database.
 
 
+
+- All users can complain other users or groups, admin can view all the complaints and do further actions, such as punish the user or shut down the group.
+
+-	Users who is kicked out by our system will have a last chance to login our system, then will be blocked forever.
+
+-	Taboo words inside any message will be converted to ***, and users who said it will be marked and their score will be decreased.
+
+-	OU can send compliment about others and receive up to 3 compliments
