@@ -1,6 +1,11 @@
 # Active Teaming System
 [Active Teaming System](https://csc322e.firebaseapp.com/) is an online teaming platform in which people can connect with other developers, form a group of people to implement a new project.
 
+#### Team members:
+- [Homin Lee](https://github.com/minthehouse)
+- [Bida Chen](https://github.com/bidachen)
+- [Jose Vargas](https://github.com/doublejvargas)
+
 #### Main features:
 
 - A user can signup by filling simple information then wait for admin's approval. Once the admin approved, the user can login to our system and forms a group then invites other users join their group.
